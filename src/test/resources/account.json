@@ -1,0 +1,12 @@
+{
+  "statusCode":200,
+  "payload":{
+    "id":56,
+    "firstname":"Testi",
+    "lastname":"Testaaja",
+    "username":"testi.testaaja",
+    "lastLogin":"2022-09-14 09:17",
+    "sessions":[],
+    "multiFactorAuthentication":false
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "statusCode":200,
+  "payload":[
+    {
+      "name":"Heikki Hypoteesi",
+      "type":"teacher",
+      "primusId":118,
+      "formKey":"teacher:118:df15a7dec0f0e75190e4cb1ba343d271",
+      "slug":"\/!01118",
+      "schools":[
+        {
+          "id":12,
+          "caption":"Esimerkkilän peruskoulu (0-9)",
+          "features":[
+            "school_common"
+          ]
+        }
+      ]
+    }
+  ]
+}
