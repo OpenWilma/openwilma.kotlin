@@ -15,7 +15,7 @@ class AnnouncementsParserTest {
 
     @Test
     fun parseAnnouncementsList() {
-        val htmlDoc = Files.readString(Paths.get(javaClass.classLoader.getResource("announcements.html")!!.toURI()))
+        val htmlDoc = Files.readString(Paths.get(javaClass.classLoader.getResource("announcements.data")!!.toURI()))
         val announcements = WilmaAnnouncementsParser.parseAnnouncements(htmlDoc)
         println(
             GsonBuilder()
@@ -28,7 +28,7 @@ class AnnouncementsParserTest {
 
     @Test
     fun parseAnnouncementContent() {
-        val htmlDoc = Files.readString(Paths.get(javaClass.classLoader.getResource("announcement.html")!!.toURI()))
+        val htmlDoc = Files.readString(Paths.get(javaClass.classLoader.getResource("announcement.data")!!.toURI()))
         val announcement = WilmaAnnouncementsParser.parseAnnouncement(htmlDoc)
         println(
             GsonBuilder()
@@ -40,7 +40,7 @@ class AnnouncementsParserTest {
 
     @Test
     fun parseAnnouncementContentWithoutDescription() {
-        val htmlDoc = Files.readString(Paths.get(javaClass.classLoader.getResource("announcement_nodesc.html")!!.toURI()))
+        val htmlDoc = Files.readString(Paths.get(javaClass.classLoader.getResource("announcement_nodesc.data")!!.toURI()))
         val announcement = WilmaAnnouncementsParser.parseAnnouncement(htmlDoc)
         println(
             GsonBuilder()

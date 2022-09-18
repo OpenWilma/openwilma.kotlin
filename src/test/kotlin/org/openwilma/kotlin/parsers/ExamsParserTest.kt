@@ -15,7 +15,7 @@ class ExamsParserTest {
 
     @Test
     fun parseUpcomingExams() {
-        val htmlDoc = Files.readString(Paths.get(javaClass.classLoader.getResource("exams_upcoming.html")!!.toURI()))
+        val htmlDoc = Files.readString(Paths.get(javaClass.classLoader.getResource("exams_upcoming.data")!!.toURI()))
         val exams = WilmaExamsParser.parseUpcomingExams(htmlDoc)
         println(
             GsonBuilder()
@@ -27,7 +27,7 @@ class ExamsParserTest {
 
     @Test
     fun parseUpcomingExamsWithGrades() {
-        val htmlDoc = Files.readString(Paths.get(javaClass.classLoader.getResource("exams_upcoming_graded.html")!!.toURI()))
+        val htmlDoc = Files.readString(Paths.get(javaClass.classLoader.getResource("exams_upcoming_graded.data")!!.toURI()))
         val exams = WilmaExamsParser.parseUpcomingExams(htmlDoc)
         println(
             GsonBuilder()
@@ -39,7 +39,7 @@ class ExamsParserTest {
 
     @Test
     fun parsePastExams() {
-        val htmlDoc = Files.readString(Paths.get(javaClass.classLoader.getResource("exams_past.html")!!.toURI()))
+        val htmlDoc = Files.readString(Paths.get(javaClass.classLoader.getResource("exams_past.data")!!.toURI()))
         val exams = WilmaExamsParser.parsePastExams(htmlDoc)
         println(
             GsonBuilder()

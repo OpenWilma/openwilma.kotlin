@@ -9,7 +9,7 @@ class LessonNoteParserTest {
 
     @Test
     fun parseLessonNotes() {
-        val htmlDoc = Files.readString(Paths.get(javaClass.classLoader.getResource("lesson_notes.html")!!.toURI()))
+        val htmlDoc = Files.readString(Paths.get(javaClass.classLoader.getResource("lesson_notes.data")!!.toURI()))
         val notes = WilmaLessonNoteParser.parseWilmaLessonNotes(htmlDoc)
         assert(notes.first().noteCodename == "03")
         assert(notes.first().noteName == "Muu kouluntoiminta /ei tunnilla")
@@ -27,7 +27,7 @@ class LessonNoteParserTest {
 
     @Test
     fun parseEmptyLessonNotes() {
-        val htmlDoc = Files.readString(Paths.get(javaClass.classLoader.getResource("lesson_notes_empty.html")!!.toURI()))
+        val htmlDoc = Files.readString(Paths.get(javaClass.classLoader.getResource("lesson_notes_empty.data")!!.toURI()))
         val notes = WilmaLessonNoteParser.parseWilmaLessonNotes(htmlDoc)
         assert(notes.isEmpty())
     }
