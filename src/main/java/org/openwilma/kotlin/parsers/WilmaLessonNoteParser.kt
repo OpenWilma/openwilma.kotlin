@@ -1,20 +1,93 @@
 package org.openwilma.kotlin.parsers
 
+import com.helger.commons.collection.impl.ICommonsList
+import com.helger.css.ECSSVersion
+import com.helger.css.decl.CSSExpressionMemberTermSimple
+import com.helger.css.decl.CSSSelectorSimpleMember
+import com.helger.css.decl.CSSStyleRule
+import com.helger.css.reader.CSSReader
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.openwilma.kotlin.OpenWilma
+import org.openwilma.kotlin.classes.lessonnotes.LessonNote
 import org.openwilma.kotlin.classes.lessonnotes.TimeRange
+import org.openwilma.kotlin.classes.misc.CSSResource
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.math.roundToInt
+
 
 class WilmaLessonNoteParser {
     companion object {
-        fun parseWilmaLessonNotes(htmlDocument: String) {
+        fun parseWilmaLessonNotes(htmlDocument: String): List<LessonNote> {
             val jsoupDocument = Jsoup.parse(htmlDocument)
+
+            val decimalRegex = "[0-9]*[.]?[0-9]+".toRegex()
 
             val table = jsoupDocument.getElementsByClass("attendance-single").first()
 
+            val cssStyling = jsoupDocument.getElementsByAttributeValue("type", "text/css")
+                .firstOrNull { item -> item.tagName() == "style" }
+
+            val bgColors: HashMap<String, String> = HashMap()
+            val foregroundColors: HashMap<String, String> = HashMap()
+
+            // Parsing colors from CSS rules
+            if (cssStyling != null) {
+                val styleSheet = CSSReader.readFromString(cssStyling.data().replace("<!--", "").replace("-->", ""), ECSSVersion.LATEST)
+                val items: ICommonsList<CSSStyleRule>? = styleSheet?.allStyleRules
+
+                val cssResources: MutableList<CSSResource> = mutableListOf()
+                if (items != null) {
+                    for (rule in items) {
+                        val classes: MutableList<String> = ArrayList()
+                        for (selector in rule.allSelectors) {
+                            for (member in selector.allMembers) {
+                                if (member is CSSSelectorSimpleMember) {
+                                    if (member.isClass) {
+                                        classes.add(member.value.drop(1))
+                                    }
+                                }
+                            }
+                        }
+                        val cssResource = CSSResource(classes)
+                        for (declaration in rule.allDeclarations) {
+                            for (icssExpressionMembers in declaration.expression.allMembers) {
+                                val expressionMemberTermSimple = icssExpressionMembers as CSSExpressionMemberTermSimple
+                                cssResource.cssParams[declaration.property] = expressionMemberTermSimple.value
+                            }
+                        }
+                        if (cssResource.cssParams.containsKey("background") || cssResource.cssParams
+                                .containsKey("background-color")
+                        ) cssResources.add(cssResource)
+                    }
+                }
+                for (cssResource in cssResources) {
+                    for (trayItemId in cssResource.typeIds) {
+                        if (cssResource.cssParams.containsKey("background")) {
+                            bgColors[trayItemId] =
+                                cssResource.cssParams["background"] as String
+                        } else if (cssResource.cssParams
+                                .containsKey("background-color")) {
+                            bgColors[trayItemId] =
+                                cssResource.cssParams["background-color"] as String
+                        }
+
+                        if (cssResource.cssParams.containsKey("color")) {
+                            foregroundColors[trayItemId] =
+                                cssResource.cssParams["color"] as String
+                        }
+                    }
+                }
+            }
+
+            val lessonNotes: MutableList<LessonNote> = mutableListOf()
             if (table != null) {
                 val tableSpacingConfigs = table.getElementsByAttributeValueStarting("style", "width :")
                 val tableTimeConfigs = table.getElementsByTag("th")
@@ -34,7 +107,6 @@ class WilmaLessonNoteParser {
                     for (span in 0..colSpan) {
                         val spacingConfig: Element = tableSpacingConfigs[lastIndex+span]
 
-                        val decimalRegex = "[0-9]*[.]?[0-9]+".toRegex()
                         decimalRegex.find(spacingConfig.attr("style"))?.let {width ->
                             val decimal = width.value.toDouble()
                             startMinutes +=
@@ -60,7 +132,6 @@ class WilmaLessonNoteParser {
                         val localEndTime: LocalTime= LocalTime.MIN.plusMinutes(endMinutes.toLong())
                         timeRanges.add(TimeRange(localStartTime, localEndTime))
                     }
-                    //timeHours.add(TimeHour(num, timeRanges))
                     lastIndex += 1+colSpan
                 }
 
@@ -68,9 +139,17 @@ class WilmaLessonNoteParser {
                 if (tableRows != null) {
                     for (note in tableRows) {
                         val tableData = note.getElementsByTag("td")
-                        val date = tableData[1].text()
-                        println(date)
-                        val notices = tableData.lastOrNull()?.text()
+                        val localDate = LocalDate.parse(tableData[1].text(), DateTimeFormatter.ofPattern("d.M.yyyy", Locale.getDefault()))
+                        // Parse notices
+                        val noticeTexts: List<String>? = tableData.lastOrNull()?.getElementsByTag("small")?.map {
+                            it.getElementsByClass("lem").remove()
+                            it.text()
+                        }
+                        val noticesMap: HashMap<String, String> = hashMapOf()
+                        noticeTexts?.forEach {
+                            noticesMap[it.split(": ").first()] = it.split(": ").last()
+                        }
+
                         tableData.removeFirst()
                         tableData.removeFirst()
                         tableData.removeLast()
@@ -79,18 +158,53 @@ class WilmaLessonNoteParser {
                         for (event in tableData) {
                             val span = event.attr("colspan").toIntOrNull() ?: 1
                             if (event.hasClass("event")) {
-                                val title = event.attr("title")
-                                val teacherCode = event.text()
+                                // Course info
+                                val courseCode: String? = if (event.attr("title").contains(";")) event.attr("title").split(";").first() else null
+
+                                // Teacher info
+                                val teacherFullName = event.attr("title").split("/").lastOrNull()?.split(" - ")?.first()
+                                val typeIdClass = event.classNames().find {it.startsWith("at-tp") && it.replace("at-tp", "").toIntOrNull() != null}
+
+                                // Disc name, comments and teacher code
+                                val discName = event.getElementsByTag("small").first()?.text()
+                                event.getElementsByTag("small").forEach { it.remove() }
+                                var comments: String? = null
+                                if (event.getElementsByTag("sup").first() != null && noticesMap.contains(event.getElementsByTag("sup").first()!!.text().trim())) {
+                                    comments = noticesMap[event.getElementsByTag("sup").first()!!.text().trim()]
+                                    event.getElementsByTag("sup").first()?.remove()
+                                }
+                                val teacherCode: String = event.text()
+
+                                // Clarification record
+                                var clarificationMaker: String? = null
+                                if (event.attr("title").contains(" - ") && event.attr("title").split("/").count() > 2) {
+                                    clarificationMaker = event.attr("title").split("/").lastOrNull()?.split(" - ")?.last()?.split("/")?.last()
+                                }
+
+                                // Duration
                                 val start = timeRanges[spanCounter-1]
                                 val end = timeRanges[spanCounter+span-1]
                                 val duration = ChronoUnit.MINUTES.between(start.start, end.start)
-                                println("$title,: $teacherCode,: ${start.start} - ${end.start} duration: $duration min")
+
+                                // Colors and names
+                                val typeDesc = jsoupDocument.getElementsByClass("$typeIdClass text-center").first()?.parent()
+                                val codeName: String? = typeDesc?.children()?.first()?.text()
+                                val fullName: String? = typeDesc?.children()?.last()?.text()
+                                val bgColor: String? = bgColors.getOrDefault(typeIdClass, null);
+                                val fgColor: String? = foregroundColors.getOrDefault(typeIdClass, null);
+
+                                val startDate = LocalDateTime.of(localDate, start.start)
+                                val endDate = LocalDateTime.of(localDate, end.start)
+
+                                // Course name not available in attendance/view
+                                lessonNotes.add(LessonNote(codeName, fullName, discName, courseCode, null, teacherCode, teacherFullName, comments, bgColor, fgColor, startDate, endDate, duration.toInt(), clarificationMaker ))
                             }
                             spanCounter += span
                         }
                     }
                 }
             }
+            return lessonNotes
         }
     }
 }

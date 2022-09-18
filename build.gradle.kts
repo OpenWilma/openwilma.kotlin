@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "org.openwilma.kotlin"
-version = "0.9-SNAPSHOT"
+version = "0.9-BETA"
 
 repositories {
     mavenCentral()
@@ -22,6 +22,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
     implementation("org.json:json:20220320")
     implementation("org.jsoup:jsoup:1.15.3")
+    implementation("com.helger:ph-css:6.5.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.9.0")
