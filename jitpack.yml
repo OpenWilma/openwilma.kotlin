@@ -1,2 +1,2 @@
 before_install:
-  - sdk install gradle 7.5.1
+  - sdk install gradle 6.4.1
