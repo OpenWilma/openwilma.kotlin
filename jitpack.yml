@@ -2,6 +2,6 @@ before_install:
   - sdk install gradle 7.5.1
 install:
   - echo "Start build"
-  - ./gradlew clean install -xtest
+  - ./gradlew clean install -xtest --info
 env:
   org.gradle.logging.level: info
