@@ -19,7 +19,7 @@ allprojects {
  
  ```gradle
  dependencies {
-	        implementation 'com.github.OpenWilma:openwilma.kotlin:Tag'
+	        implementation 'com.github.OpenWilma:openwilma.kotlin:version'
  }
  ```
  
