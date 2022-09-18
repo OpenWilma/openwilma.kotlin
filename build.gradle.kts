@@ -8,7 +8,7 @@ plugins {
     kotlin("jvm") version "1.6.21"
 }
 
-group = "org.openwilma.kotlin"
+group = "com.github.OpenWilma"
 version = "0.9.3-BETA"
 
 repositories {
