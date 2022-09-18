@@ -27,8 +27,8 @@ suspend fun OpenWilma.getSessionId(wilmaServer: WilmaServer, skipVersionValidati
         httpClient.getRequest(URLUtils.buildUrl(wilmaServer, "index_json"), object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 val responseObject: SessionResponse = WilmaJSONParser.gson.fromJson(response, object: TypeToken<SessionResponse>() {}.type)
-                if (responseObject.apiVersion < version && !skipVersionValidation) {
-                    it.resumeWithException(Error("Wilma version ${responseObject.apiVersion} is not supported. Minimum supported version is $version", ErrorType.UnsupportedServer))
+                if (responseObject.apiVersion < minimumSupportedWilmaVersion && !skipVersionValidation) {
+                    it.resumeWithException(Error("Wilma version ${responseObject.apiVersion} is not supported. Minimum supported version is $minimumSupportedWilmaVersion", ErrorType.UnsupportedServer))
                     return
                 }
                 it.resume(responseObject)
