@@ -11,7 +11,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-public suspend fun OpenWilma.getWilmaServers(): WilmaServersResponse {
+public suspend fun OpenWilma.Companion.getWilmaServers(): WilmaServersResponse {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient()
         httpClient.getRequest(Config.wilmaServersURL, object : WilmaHttpClient.HttpClientInterface {

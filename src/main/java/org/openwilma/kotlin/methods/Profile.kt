@@ -17,7 +17,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-public suspend fun OpenWilma.getUserAccount(wilmaSession: WilmaSession): WilmaAPIResponse<WilmaAccountInfo> {
+public suspend fun OpenWilma.Companion.getUserAccount(wilmaSession: WilmaSession): WilmaAPIResponse<WilmaAccountInfo> {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient(wilmaSession)
         httpClient.getRequest(URLUtils.buildUrl(wilmaSession.wilmaServer, "api/v1/accounts/me"), object : WilmaHttpClient.HttpClientInterface {
@@ -35,7 +35,7 @@ public suspend fun OpenWilma.getUserAccount(wilmaSession: WilmaSession): WilmaAP
 }
 
 
-public suspend fun OpenWilma.getRoles(wilmaSession: WilmaSession): WilmaAPIResponse<List<WilmaRole>> {
+public suspend fun OpenWilma.Companion.getRoles(wilmaSession: WilmaSession): WilmaAPIResponse<List<WilmaRole>> {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient(wilmaSession)
         httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/accounts/me/roles", requireRole = false), object : WilmaHttpClient.HttpClientInterface {
@@ -52,11 +52,11 @@ public suspend fun OpenWilma.getRoles(wilmaSession: WilmaSession): WilmaAPIRespo
     }
 }
 
-public suspend fun OpenWilma.getActiveUserFormKey(wilmaSession: WilmaSession, roleRequired: Boolean = false): String? {
+public suspend fun OpenWilma.Companion.getActiveUserFormKey(wilmaSession: WilmaSession, roleRequired: Boolean = false): String? {
     return getActiveRole(wilmaSession, roleRequired)?.formKey
 }
 
-public suspend fun OpenWilma.getActiveRole(wilmaSession: WilmaSession, roleRequired: Boolean = false): WilmaRole? {
+public suspend fun OpenWilma.Companion.getActiveRole(wilmaSession: WilmaSession, roleRequired: Boolean = false): WilmaRole? {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient(wilmaSession)
         httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/accounts/me/roles", requireRole = roleRequired), object : WilmaHttpClient.HttpClientInterface {

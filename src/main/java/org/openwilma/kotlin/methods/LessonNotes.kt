@@ -21,7 +21,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-public suspend fun OpenWilma.getLessonNotes(wilmaSession: WilmaSession, dateRange: LessonNoteRange = LessonNoteRange.DEFAULT, start: LocalDate? = null, end: LocalDate? = null): List<LessonNote> {
+public suspend fun OpenWilma.Companion.getLessonNotes(wilmaSession: WilmaSession, dateRange: LessonNoteRange = LessonNoteRange.DEFAULT, start: LocalDate? = null, end: LocalDate? = null): List<LessonNote> {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient(wilmaSession)
         val dateFormat = DateTimeFormatter.ofPattern("d.M.yyyy", Locale.getDefault())
