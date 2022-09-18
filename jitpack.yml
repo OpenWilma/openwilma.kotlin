@@ -1,2 +1,5 @@
 before_install:
   - sdk install gradle 7.5.1
+env:
+  GRADLE_OPTS: org.gradle.logging.level=info
+  org.gradle.logging.level: info
