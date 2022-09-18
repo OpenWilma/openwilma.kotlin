@@ -1,11 +1,9 @@
 package org.openwilma.kotlin.parsers
 
-import com.google.gson.Gson
 import org.openwilma.kotlin.classes.responses.ScheduleResponse
 import org.openwilma.kotlin.classes.schedule.models.ScheduleDay
 import org.openwilma.kotlin.classes.schedule.models.WilmaSchedule
 import org.openwilma.kotlin.classes.schedule.wilmamodel.Reservation
-import java.text.SimpleDateFormat
 import java.time.*
 import java.time.temporal.TemporalAdjusters
 import java.time.temporal.WeekFields
@@ -38,7 +36,6 @@ class WilmaScheduleReformatter {
             c.set(Calendar.MILLISECOND, 0)
 
             val monday = c.time
-            val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
             val reservations: LinkedHashMap<Long, MutableList<Reservation>> = linkedMapOf()
             var currentDay: Int = (schedule.reservations.firstOrNull()?.day ?: 1)-1
             var lastDay = 0
@@ -62,9 +59,9 @@ class WilmaScheduleReformatter {
 
                 val dayUnix = calendar.timeInMillis
 
-                reservation.startDate = Date.from(LocalDateTime.of(LocalDate.ofInstant(calendar.toInstant(), calendar.timeZone.toZoneId()), LocalTime.parse(reservation.start)).atZone(
+                reservation.startDate = Date.from(LocalDateTime.of(ZonedDateTime.ofInstant(calendar.toInstant(), calendar.timeZone.toZoneId()).toLocalDate(), LocalTime.parse(reservation.start)).atZone(
                     ZoneId.systemDefault()).toInstant())
-                reservation.endDate = Date.from(LocalDateTime.of(LocalDate.ofInstant(calendar.toInstant(), calendar.timeZone.toZoneId()), LocalTime.parse(reservation.end)).atZone(
+                reservation.endDate = Date.from(LocalDateTime.of(ZonedDateTime.ofInstant(calendar.toInstant(), calendar.timeZone.toZoneId()).toLocalDate(), LocalTime.parse(reservation.end)).atZone(
                     ZoneId.systemDefault()).toInstant())
 
                 if (reservations.contains(dayUnix)) {
