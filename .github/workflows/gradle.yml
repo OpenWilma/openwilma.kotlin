@@ -31,4 +31,4 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
     - name: Test
-      run: ./gradlew test --tests "*"
+      run: gradle test
