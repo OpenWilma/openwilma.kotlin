@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "org.openwilma.kotlin"
-version = "0.9.1-BETA"
+version = "0.9.2-BETA"
 
 repositories {
     mavenCentral()
