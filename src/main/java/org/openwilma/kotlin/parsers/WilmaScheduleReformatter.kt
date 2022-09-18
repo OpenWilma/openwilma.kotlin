@@ -17,13 +17,13 @@ class WilmaScheduleReformatter {
 
         fun getCorrectWeekDay(weekDay: Int): Int {
             when (weekDay) {
-                1 -> Calendar.MONDAY
-                2 -> Calendar.TUESDAY
-                3 -> Calendar.WEDNESDAY
-                4 -> Calendar.THURSDAY
-                5 -> Calendar.FRIDAY
-                6 -> Calendar.SATURDAY
-                7 -> Calendar.SUNDAY
+                1 -> return Calendar.MONDAY
+                2 -> return Calendar.TUESDAY
+                3 -> return Calendar.WEDNESDAY
+                4 -> return Calendar.THURSDAY
+                5 -> return Calendar.FRIDAY
+                6 -> return Calendar.SATURDAY
+                7 -> return Calendar.SUNDAY
             }
             return weekDay
         }
