@@ -4,11 +4,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("groovy")
     id("java-library")
+    id("maven-publish")
     kotlin("jvm") version "1.6.21"
 }
 
 group = "org.openwilma.kotlin"
-version = "0.9.2-BETA"
+version = "0.9.3-BETA"
 
 repositories {
     mavenCentral()
