@@ -1,4 +1,4 @@
-name: Tests
+name: CI
 
 on:
   push:
@@ -30,7 +30,5 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-    - name: Run tests
-      uses: jojo243/android-gradle-action@2.1.3
-      with:
-        script: test
+    - name: Test
+      run: ./gradlew test --tests "*"
