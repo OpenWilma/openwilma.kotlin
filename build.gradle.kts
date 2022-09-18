@@ -8,14 +8,22 @@ plugins {
     kotlin("jvm") version "1.6.21"
 }
 
-group = "com.github.OpenWilma"
-version = "0.9.3-BETA"
-
 repositories {
     mavenCentral()
 }
 
 
+
+publishing {
+    publications {
+        register("mavenJava", MavenPublication::class) {
+            from(components["java"])
+            groupId = "org.openwilma"
+            artifactId = "kotlin"
+            version = "0.9.3-BETA"
+        }
+    }
+}
 
 dependencies {
     implementation("org.apache.groovy:groovy:4.0.5")
