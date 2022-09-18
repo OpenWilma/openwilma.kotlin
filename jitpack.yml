@@ -1,4 +1,4 @@
 before_install:
+  - sdk install java 11.0.10
+  - sdk use java 11.0.10
   - sdk install gradle 7.5.1
-env:
-  org.gradle.logging.level: info
