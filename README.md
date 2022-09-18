@@ -1,6 +1,7 @@
 # openwilma.kotlin
 OpenWilma Kotlin library
 
+[![](https://jitpack.io/v/OpenWilma/openwilma.kotlin.svg)](https://jitpack.io/#OpenWilma/openwilma.kotlin)
 ## How to install
 
 1. Add jitpack.io to root build.gradle:
