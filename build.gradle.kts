@@ -12,15 +12,13 @@ repositories {
     mavenCentral()
 }
 
-
-
 publishing {
     publications {
         register("mavenJava", MavenPublication::class) {
             from(components["java"])
             groupId = "org.openwilma"
             artifactId = "kotlin"
-            version = "0.9.3-BETA"
+            version = "0.9.4-BETA"
         }
     }
 }

@@ -26,7 +26,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-suspend fun OpenWilma.getSchedule(wilmaSession: WilmaSession, date: LocalDate = LocalDate.now()): WilmaSchedule {
+public suspend fun OpenWilma.getSchedule(wilmaSession: WilmaSession, date: LocalDate = LocalDate.now()): WilmaSchedule {
     // Role required for user type
     val currentRole: WilmaRole = wilmaSession.getRole() ?: getActiveRole(wilmaSession, false)!!
     return suspendCoroutine {
@@ -51,7 +51,7 @@ suspend fun OpenWilma.getSchedule(wilmaSession: WilmaSession, date: LocalDate = 
     }
 }
 
-suspend fun OpenWilma.getScheduleRange(wilmaSession: WilmaSession, start: LocalDate, end: LocalDate): WilmaSchedule {
+public suspend fun OpenWilma.getScheduleRange(wilmaSession: WilmaSession, start: LocalDate, end: LocalDate): WilmaSchedule {
     val days: MutableList<ScheduleDay> = mutableListOf()
     val terms: MutableList<Term> = mutableListOf()
     for (week in DateUtils.splitWeeksFromRange(start, end, WeekFields.ISO)) {

@@ -21,7 +21,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-suspend fun OpenWilma.getSessionId(wilmaServer: WilmaServer, skipVersionValidation: Boolean = false): SessionResponse {
+public suspend fun OpenWilma.getSessionId(wilmaServer: WilmaServer, skipVersionValidation: Boolean = false): SessionResponse {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient()
         httpClient.getRequest(URLUtils.buildUrl(wilmaServer, "index_json"), object : WilmaHttpClient.HttpClientInterface {
@@ -43,7 +43,7 @@ suspend fun OpenWilma.getSessionId(wilmaServer: WilmaServer, skipVersionValidati
     }
 }
 
-suspend fun OpenWilma.signIn(wilmaServer: WilmaServer, username: String, password: String, skipVersionValidation: Boolean = false): WilmaSession {
+public suspend fun OpenWilma.signIn(wilmaServer: WilmaServer, username: String, password: String, skipVersionValidation: Boolean = false): WilmaSession {
     val sessionId = getSessionId(wilmaServer, skipVersionValidation = skipVersionValidation)
     val cookie: String = suspendCoroutine {
         val httpClient = WilmaHttpClient(false)

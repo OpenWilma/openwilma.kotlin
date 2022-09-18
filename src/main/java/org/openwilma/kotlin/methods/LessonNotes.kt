@@ -21,16 +21,16 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-suspend fun OpenWilma.getLessonNotes(wilmaSession: WilmaSession, dateRange: LessonNoteRange = LessonNoteRange.DEFAULT, start: LocalDate? = null, end: LocalDate? = null): List<LessonNote> {
+public suspend fun OpenWilma.getLessonNotes(wilmaSession: WilmaSession, dateRange: LessonNoteRange = LessonNoteRange.DEFAULT, start: LocalDate? = null, end: LocalDate? = null): List<LessonNote> {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient(wilmaSession)
         val dateFormat = DateTimeFormatter.ofPattern("d.M.yyyy", Locale.getDefault())
         httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "attendance/view?range=${dateRange.identifier}"+(if (start != null) "&first=${start.format(dateFormat)}" else "")+(if (end != null) "&last=${end.format(dateFormat)}" else "")+"&printable&format=json"), object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 if (JSONUtils.isJSONValid(response)) {
-                    val schedule: JSONErrorResponse = WilmaJSONParser.gson.fromJson(response, object: TypeToken<JSONErrorResponse>() {}.type)
-                    if (schedule.wilmaError != null) {
-                        it.resumeWithException(schedule.wilmaError!!)
+                    val error: JSONErrorResponse = WilmaJSONParser.gson.fromJson(response, object: TypeToken<JSONErrorResponse>() {}.type)
+                    if (error.wilmaError != null) {
+                        it.resumeWithException(error.wilmaError!!)
                         return
                     }
                 }

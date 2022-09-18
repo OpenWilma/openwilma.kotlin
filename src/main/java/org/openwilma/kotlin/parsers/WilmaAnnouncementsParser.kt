@@ -63,10 +63,10 @@ class WilmaAnnouncementsParser {
             return announcements
         }
 
-        fun parseAnnouncement(htmlDocument: String): Announcement {
+        fun parseAnnouncement(htmlDocument: String): Announcement? {
             val jsoupDocument = Jsoup.parse(htmlDocument)
-            val card = jsoupDocument.getElementsByClass("panel-body").first()!!
-            val newsId = jsoupDocument.getElementsByAttributeValue("target", "preview").first()?.attr("href")?.split("/")?.last()?.trim()?.toInt()!!
+            val card = jsoupDocument.getElementsByClass("panel-body").first() ?: return null
+            val newsId = jsoupDocument.getElementsByAttributeValue("target", "preview").first()?.attr("href")?.split("/")?.last()?.trim()?.toInt() ?: return null
             val newsContent = card.getElementById("news-content")?.html()
             val title = card.getElementsByTag("h2").first()!!.text()
             val createDateElement = card.getElementsByClass("small semi-bold").first()
