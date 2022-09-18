@@ -1,1 +1,1 @@
-rootProject.name = "openwilma-kotlin"
+rootProject.name = "openwilma.kotlin"
