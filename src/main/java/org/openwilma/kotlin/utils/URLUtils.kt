@@ -2,6 +2,7 @@ package org.openwilma.kotlin.utils
 
 import org.openwilma.kotlin.classes.WilmaServer
 import org.openwilma.kotlin.classes.WilmaSession
+import org.openwilma.kotlin.classes.user.WilmaRole
 import org.openwilma.kotlin.config.Config
 import java.net.URI
 
@@ -16,6 +17,16 @@ object URLUtils {
     fun buildUrl(wilmaSession: WilmaSession, path: String, requireRole: Boolean = true): String {
         var serverUrl = wilmaSession.wilmaServer.serverURL
         var slug = wilmaSession.getRole(requireRole)?.slug ?: ""
+        if (slug.isNotEmpty() && slug[0] == '/') {
+            slug = slug.drop(1)+"/"
+        }
+        serverUrl = if (serverUrl.endsWith("/")) "$serverUrl$slug$path" else "$serverUrl/$slug$path"
+        return serverUrl
+    }
+
+    fun buildUrlWithRole(wilmaSession: WilmaSession, role: WilmaRole?, path: String): String {
+        var serverUrl = wilmaSession.wilmaServer.serverURL
+        var slug = role?.slug ?: ""
         if (slug.isNotEmpty() && slug[0] == '/') {
             slug = slug.drop(1)+"/"
         }

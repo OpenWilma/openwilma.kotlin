@@ -9,5 +9,6 @@ data class WilmaRole(
     @field:SerializedName("primusId") var primusId: Int,
     @field:SerializedName("slug") var slug: String?,
     @field:SerializedName("formKey") var formKey: String?,
-    @field:SerializedName("schools") var schools: List<WilmaSchool>
+    @field:SerializedName("schools") var schools: List<WilmaSchool>,
+    var profilePicture: String? = null
 )

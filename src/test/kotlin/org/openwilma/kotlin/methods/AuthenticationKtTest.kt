@@ -1,6 +1,7 @@
 package org.openwilma.kotlin.methods
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.openwilma.kotlin.OpenWilma
@@ -35,7 +36,7 @@ internal class AuthenticationKtTest {
     fun getRoles(): Unit = runBlocking {
         val wilmaSession = OpenWilma.signInToWilma(wilmaServer, "ope", "ope")
         val roles = OpenWilma.roles(wilmaSession)
-        println(roles)
+        println(GsonBuilder().setPrettyPrinting().create().toJson(roles))
         assert(roles.payload?.isNotEmpty() ?: false)
     }
 }

@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat
 
 class ParseUserAccountJSON {
 
-    private val role = WilmaRole(name = "Heikki Hypoteesi", type = UserType.TEACHER, primusId = 118,
+    private val role = WilmaRole(name = "Heikki Hypoteesi",  type = UserType.TEACHER, primusId = 118,
         formKey = "teacher:118:df15a7dec0f0e75190e4cb1ba343d271", slug = "/!01118", schools = listOf(
         WilmaSchool(name = "Esimerkkilän peruskoulu (0-9)", id = 12, features = listOf("school_common"))
     ))
