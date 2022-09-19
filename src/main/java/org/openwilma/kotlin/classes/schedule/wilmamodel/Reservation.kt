@@ -14,6 +14,8 @@ data class Reservation  (
     var day: Int,
     @SerializedName("Start")
     var start: String,
+    var startDate: Date,
+    var endDate: Date,
     @SerializedName("End")
     var end: String,
     @SerializedName("Color")

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import java.util.StringJoiner
 
 class WilmaError(
-    @field:SerializedName("message") override var message: String?, @field:SerializedName("id") var errorID: String, @field:SerializedName(
+    message: String?, @field:SerializedName("id") var errorID: String, @field:SerializedName(
         "description"
     ) var description: String, @field:SerializedName("whatnext") var whatsnext: String
 ) : Error(message, ErrorType.WilmaError) {
