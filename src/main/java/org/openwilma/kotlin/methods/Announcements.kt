@@ -18,7 +18,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-public suspend fun OpenWilma.Companion.getAnnouncements(wilmaSession: WilmaSession): List<Announcement> {
+public suspend fun getAnnouncements(wilmaSession: WilmaSession): List<Announcement> {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient(wilmaSession)
         httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "news?printable&format=json"), object : WilmaHttpClient.HttpClientInterface {
@@ -42,7 +42,7 @@ public suspend fun OpenWilma.Companion.getAnnouncements(wilmaSession: WilmaSessi
     }
 }
 
-public suspend fun OpenWilma.Companion.getAnnouncement(wilmaSession: WilmaSession, id: Int): Announcement? {
+public suspend fun getAnnouncement(wilmaSession: WilmaSession, id: Int): Announcement? {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient(wilmaSession)
         httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "news/$id?printable&format=json"), object : WilmaHttpClient.HttpClientInterface {

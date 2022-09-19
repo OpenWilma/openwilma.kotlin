@@ -2,7 +2,6 @@ package org.openwilma.kotlin.methods
 
 import com.google.gson.reflect.TypeToken
 import okhttp3.Response
-import org.openwilma.kotlin.OpenWilma
 import org.openwilma.kotlin.classes.responses.WilmaServersResponse
 import org.openwilma.kotlin.clients.WilmaHttpClient
 import org.openwilma.kotlin.config.Config
@@ -11,7 +10,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-public suspend fun OpenWilma.Companion.getWilmaServers(): WilmaServersResponse {
+public suspend fun getWilmaServers(): WilmaServersResponse {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient()
         httpClient.getRequest(Config.wilmaServersURL, object : WilmaHttpClient.HttpClientInterface {

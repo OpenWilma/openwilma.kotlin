@@ -22,17 +22,17 @@ class ExamsKtTest {
 
     private val wilmaServer = WilmaServer("https://espoondemo.inschool.fi")
 
-    private lateinit var session: WilmaSession
+    private var openWilma = OpenWilma()
 
     @BeforeEach
-    internal fun setUp() = runBlocking {
-        session = OpenWilma.signIn(wilmaServer, "oppilas", "oppilas")
+    internal fun setUp(): Unit = runBlocking {
+        openWilma.signInToWilma(wilmaServer, "oppilas", "oppilas")
     }
 
 
     @Test
     fun testPastExams() = runBlocking {
-        val exams = OpenWilma.getPastExams(wilmaSession = session, start = LocalDate.of(2016, 12, 9), end = LocalDate.of(2023, 6, 3))
+        val exams = openWilma.pastExams(start = LocalDate.of(2016, 12, 9), end = LocalDate.of(2023, 6, 3))
         println("past: "+GsonBuilder()
             .registerTypeAdapter(LocalDate::class.java, LocalDateGSONAdapter())
             .registerTypeAdapter(LocalTime::class.java, LocalTimeGSONAdapter())
@@ -41,7 +41,7 @@ class ExamsKtTest {
 
     @Test
     fun testUpcomingExams() = runBlocking {
-        val exams = OpenWilma.getUpcomingExams(wilmaSession = session)
+        val exams = openWilma.upcomingExams()
         println("upcoming: "+GsonBuilder()
             .registerTypeAdapter(LocalDate::class.java, LocalDateGSONAdapter())
             .registerTypeAdapter(LocalTime::class.java, LocalTimeGSONAdapter())

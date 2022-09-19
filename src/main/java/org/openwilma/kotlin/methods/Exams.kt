@@ -19,10 +19,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-public object OpenWilma {
-
-}
-public suspend fun OpenWilma.Companion.getUpcomingExams(wilmaSession: WilmaSession): List<Exam> {
+public suspend fun getUpcomingExams(wilmaSession: WilmaSession): List<Exam> {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient(wilmaSession)
         httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "exams/calendar?format=json"), object : WilmaHttpClient.HttpClientInterface {
@@ -46,7 +43,7 @@ public suspend fun OpenWilma.Companion.getUpcomingExams(wilmaSession: WilmaSessi
     }
 }
 
-public suspend fun OpenWilma.Companion.getPastExams(wilmaSession: WilmaSession, start: LocalDate? = null, end: LocalDate? = null): List<Exam> {
+public suspend fun getPastExams(wilmaSession: WilmaSession, start: LocalDate? = null, end: LocalDate? = null): List<Exam> {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient(wilmaSession)
         val dateFormat = DateTimeFormatter.ofPattern("d.M.yyyy", Locale.getDefault())

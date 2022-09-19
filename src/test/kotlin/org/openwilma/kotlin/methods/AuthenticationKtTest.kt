@@ -13,28 +13,28 @@ internal class AuthenticationKtTest {
 
     @Test
     fun getSessionId(): Unit = runBlocking {
-        val sessionResp = OpenWilma.getSessionId(wilmaServer)
+        val sessionResp = OpenWilma.newSession(wilmaServer)
         println(Gson().toJson(sessionResp))
         assert(sessionResp.sessionId.isNotEmpty())
     }
 
     @Test
     fun signInUsingBasicAccount(): Unit = runBlocking {
-        val wilmaSession = OpenWilma.signIn(wilmaServer, "oppilas", "oppilas")
+        val wilmaSession = OpenWilma.signInToWilma(wilmaServer, "oppilas", "oppilas")
         println(Gson().toJson(wilmaSession))
         assert(wilmaSession.getAccountInfo() == null)
     }
 
     @Test
     fun signInUsingRoleAccount(): Unit = runBlocking {
-        val wilmaSession = OpenWilma.signIn(wilmaServer, "ope", "ope")
+        val wilmaSession = OpenWilma.signInToWilma(wilmaServer, "ope", "ope")
         assert(wilmaSession.getAccountInfo() != null)
     }
 
     @Test
     fun getRoles(): Unit = runBlocking {
-        val wilmaSession = OpenWilma.signIn(wilmaServer, "ope", "ope")
-        val roles = OpenWilma.getRoles(wilmaSession)
+        val wilmaSession = OpenWilma.signInToWilma(wilmaServer, "ope", "ope")
+        val roles = OpenWilma.roles(wilmaSession)
         println(roles)
         assert(roles.payload?.isNotEmpty() ?: false)
     }

@@ -21,14 +21,14 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-public suspend fun OpenWilma.Companion.getSessionId(wilmaServer: WilmaServer, skipVersionValidation: Boolean = false): SessionResponse {
+public suspend fun getSessionId(wilmaServer: WilmaServer, skipVersionValidation: Boolean = false): SessionResponse {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient()
         httpClient.getRequest(URLUtils.buildUrl(wilmaServer, "index_json"), object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 val responseObject: SessionResponse = WilmaJSONParser.gson.fromJson(response, object: TypeToken<SessionResponse>() {}.type)
                 if (responseObject.apiVersion < OpenWilma.minimumSupportedWilmaVersion && !skipVersionValidation) {
-                    it.resumeWithException(Error("Wilma version ${responseObject.apiVersion} is not supported. Minimum supported version is $minimumSupportedWilmaVersion", ErrorType.UnsupportedServer))
+                    it.resumeWithException(Error("Wilma version ${responseObject.apiVersion} is not supported. Minimum supported version is $OpenWilma.minimumSupportedWilmaVersion", ErrorType.UnsupportedServer))
                     return
                 }
                 it.resume(responseObject)
@@ -43,7 +43,7 @@ public suspend fun OpenWilma.Companion.getSessionId(wilmaServer: WilmaServer, sk
     }
 }
 
-public suspend fun OpenWilma.Companion.signIn(wilmaServer: WilmaServer, username: String, password: String, skipVersionValidation: Boolean = false): WilmaSession {
+public suspend fun signIn(wilmaServer: WilmaServer, username: String, password: String, skipVersionValidation: Boolean = false): WilmaSession {
     val sessionId = getSessionId(wilmaServer, skipVersionValidation = skipVersionValidation)
     val cookie: String = suspendCoroutine {
         val httpClient = WilmaHttpClient(false)

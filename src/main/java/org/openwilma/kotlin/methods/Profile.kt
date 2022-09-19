@@ -2,10 +2,8 @@ package org.openwilma.kotlin.methods
 
 import com.google.gson.reflect.TypeToken
 import okhttp3.Response
-import org.openwilma.kotlin.OpenWilma
 import org.openwilma.kotlin.classes.WilmaSession
 import org.openwilma.kotlin.classes.errors.Error
-import org.openwilma.kotlin.classes.errors.WilmaError
 import org.openwilma.kotlin.classes.responses.WilmaAPIResponse
 import org.openwilma.kotlin.classes.user.WilmaAccountInfo
 import org.openwilma.kotlin.classes.user.WilmaRole
@@ -17,7 +15,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-public suspend fun OpenWilma.Companion.getUserAccount(wilmaSession: WilmaSession): WilmaAPIResponse<WilmaAccountInfo> {
+public suspend fun getUserAccount(wilmaSession: WilmaSession): WilmaAPIResponse<WilmaAccountInfo> {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient(wilmaSession)
         httpClient.getRequest(URLUtils.buildUrl(wilmaSession.wilmaServer, "api/v1/accounts/me"), object : WilmaHttpClient.HttpClientInterface {
@@ -35,7 +33,7 @@ public suspend fun OpenWilma.Companion.getUserAccount(wilmaSession: WilmaSession
 }
 
 
-public suspend fun OpenWilma.Companion.getRoles(wilmaSession: WilmaSession): WilmaAPIResponse<List<WilmaRole>> {
+public suspend fun getRoles(wilmaSession: WilmaSession): WilmaAPIResponse<List<WilmaRole>> {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient(wilmaSession)
         httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/accounts/me/roles", requireRole = false), object : WilmaHttpClient.HttpClientInterface {
@@ -52,11 +50,11 @@ public suspend fun OpenWilma.Companion.getRoles(wilmaSession: WilmaSession): Wil
     }
 }
 
-public suspend fun OpenWilma.Companion.getActiveUserFormKey(wilmaSession: WilmaSession, roleRequired: Boolean = false): String? {
+public suspend fun getActiveUserFormKey(wilmaSession: WilmaSession, roleRequired: Boolean = false): String? {
     return getActiveRole(wilmaSession, roleRequired)?.formKey
 }
 
-public suspend fun OpenWilma.Companion.getActiveRole(wilmaSession: WilmaSession, roleRequired: Boolean = false): WilmaRole? {
+public suspend fun getActiveRole(wilmaSession: WilmaSession, roleRequired: Boolean = false): WilmaRole? {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient(wilmaSession)
         httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/accounts/me/roles", requireRole = roleRequired), object : WilmaHttpClient.HttpClientInterface {

@@ -2,12 +2,10 @@ package org.openwilma.kotlin.methods
 
 import com.google.gson.reflect.TypeToken
 import okhttp3.Response
-import org.openwilma.kotlin.OpenWilma
 import org.openwilma.kotlin.classes.WilmaSession
 import org.openwilma.kotlin.classes.errors.Error
 import org.openwilma.kotlin.classes.lessonnotes.LessonNote
 import org.openwilma.kotlin.classes.responses.JSONErrorResponse
-import org.openwilma.kotlin.classes.responses.ScheduleResponse
 import org.openwilma.kotlin.clients.WilmaHttpClient
 import org.openwilma.kotlin.enums.LessonNoteRange
 import org.openwilma.kotlin.parsers.WilmaJSONParser
@@ -21,7 +19,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-public suspend fun OpenWilma.Companion.getLessonNotes(wilmaSession: WilmaSession, dateRange: LessonNoteRange = LessonNoteRange.DEFAULT, start: LocalDate? = null, end: LocalDate? = null): List<LessonNote> {
+public suspend fun getLessonNotes(wilmaSession: WilmaSession, dateRange: LessonNoteRange = LessonNoteRange.DEFAULT, start: LocalDate? = null, end: LocalDate? = null): List<LessonNote> {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient(wilmaSession)
         val dateFormat = DateTimeFormatter.ofPattern("d.M.yyyy", Locale.getDefault())

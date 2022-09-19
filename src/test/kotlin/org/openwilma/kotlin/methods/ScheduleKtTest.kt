@@ -13,22 +13,22 @@ class ScheduleKtTest {
 
     private val wilmaServer = WilmaServer("https://espoondemo.inschool.fi")
 
-    private lateinit var session: WilmaSession
+    private var client = OpenWilma()
 
     @BeforeEach
-    internal fun setUp() = runBlocking {
-        session = OpenWilma.signIn(wilmaServer, "oppilas", "oppilas")
+    internal fun setUp(): Unit = runBlocking {
+        client.signInToWilma(wilmaServer, "oppilas", "oppilas")
     }
 
     @Test
     fun getSchedule() = runBlocking {
-        val schedule = OpenWilma.getSchedule(session)
+        val schedule = client.schedule()
         println(Gson().toJson(schedule))
     }
 
     @Test
     fun getScheduleInRange() = runBlocking {
-        val schedule = OpenWilma.getScheduleRange(session, LocalDate.now(), LocalDate.now().plusDays(12))
+        val schedule = client.scheduleRange(LocalDate.now(), LocalDate.now().plusDays(12))
         println(Gson().toJson(schedule))
     }
 }

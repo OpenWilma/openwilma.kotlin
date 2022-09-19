@@ -20,17 +20,17 @@ class LessonNotesKtTest {
 
     private val wilmaServer = WilmaServer("https://espoondemo.inschool.fi")
 
-    private lateinit var session: WilmaSession
+    private var client = OpenWilma()
 
     @BeforeEach
-    internal fun setUp() = runBlocking {
-        session = OpenWilma.signIn(wilmaServer, "oppilas", "oppilas")
+    internal fun setUp(): Unit = runBlocking {
+        client.signInToWilma(wilmaServer, "oppilas", "oppilas")
     }
 
 
     @Test
     fun testLessonNotes() = runBlocking {
-        val lessonNotes = OpenWilma.getLessonNotes(wilmaSession = session, dateRange = LessonNoteRange.CUSTOM, start = LocalDate.of(2016, 12, 9), end = LocalDate.of(2023, 6, 3))
+        val lessonNotes = client.lessonNotes(dateRange = LessonNoteRange.CUSTOM, start = LocalDate.of(2016, 12, 9), end = LocalDate.of(2023, 6, 3))
         println(GsonBuilder()
             .registerTypeAdapter(LocalDate::class.java, LocalDateGSONAdapter())
             .registerTypeAdapter(LocalTime::class.java, LocalTimeGSONAdapter())
