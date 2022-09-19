@@ -21,6 +21,8 @@ data class Group (
     var shortCaption: String? = null,
     @SerializedName("LongCaption")
     var longCaption: String? = null,
+    @SerializedName("FullCaption")
+    var fullCaption: String? = null,
     @SerializedName("StartDate")
     private var StartDate: Date? = null,
     @SerializedName("EndDate")
