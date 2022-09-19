@@ -1,22 +1,32 @@
 package org.openwilma.kotlin.classes.schedule.wilmamodel
 
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
-class Group(
-    @field:SerializedName("Id") var id: Int, @field:SerializedName(
-        "courseId"
-    )
-    var courseId: Int,
 
-    @field:SerializedName("ShortCaption") var shortCaption: String, @field:SerializedName(
-        "Caption"
-    ) var caption: String,
-
-    @field:SerializedName("FullCaption") var fullCaption: String, @field:SerializedName(
-        "Class"
-    ) var className: String,
-
-    @field:SerializedName("Teachers") var teachers: List<Teacher>, @field:SerializedName(
-        "Rooms"
-    ) var rooms: List<Room>
+data class Group (
+    @SerializedName("Id")
+    var id: Int? = 0,
+    @SerializedName("CourseId")
+    var courseId: Int? = 0,
+    @SerializedName("CourseName")
+    var courseName: String? = null,
+    @SerializedName("CourseCode")
+    var courseCode: String? = null,
+    @SerializedName("Name")
+    var name: String? = null,
+    @SerializedName("Caption")
+    var caption: String? = null,
+    @SerializedName("ShortCaption")
+    var shortCaption: String? = null,
+    @SerializedName("StartDate")
+    private var StartDate: Date? = null,
+    @SerializedName("EndDate")
+    private var EndDate: Date? = null,
+    @SerializedName("Committed")
+    var isCommitted: Boolean = false,
+    @SerializedName("Teachers")
+    var teachers: List<Teacher>? = null,
+    @SerializedName("Rooms")
+    var rooms: List<Room> = ArrayList()
 )
