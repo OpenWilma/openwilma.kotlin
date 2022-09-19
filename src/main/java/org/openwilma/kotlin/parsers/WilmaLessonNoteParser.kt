@@ -1,5 +1,7 @@
 package org.openwilma.kotlin.parsers
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.helger.commons.collection.impl.ICommonsList
 import com.helger.css.ECSSVersion
 import com.helger.css.decl.CSSExpressionMemberTermSimple
@@ -12,6 +14,9 @@ import org.openwilma.kotlin.OpenWilma
 import org.openwilma.kotlin.classes.lessonnotes.LessonNote
 import org.openwilma.kotlin.classes.lessonnotes.TimeRange
 import org.openwilma.kotlin.classes.misc.CSSResource
+import org.openwilma.kotlin.utils.LocalDateGSONAdapter
+import org.openwilma.kotlin.utils.LocalDateTimeGSONAdapter
+import org.openwilma.kotlin.utils.LocalTimeGSONAdapter
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -162,7 +167,7 @@ class WilmaLessonNoteParser {
                                 val courseCode: String? = if (event.attr("title").contains(";")) event.attr("title").split(";").first() else null
 
                                 // Teacher info
-                                val teacherFullName = event.attr("title").split("/").lastOrNull()?.split(" - ")?.first()
+                                val teacherFullName = event.attr("title").split(" - ").first().split("/").lastOrNull()
                                 val typeIdClass = event.classNames().find {it.startsWith("at-tp") && it.replace("at-tp", "").toIntOrNull() != null}
 
                                 // Disc name, comments and teacher code
@@ -181,17 +186,23 @@ class WilmaLessonNoteParser {
                                     clarificationMaker = event.attr("title").split("/").lastOrNull()?.split(" - ")?.last()?.split("/")?.last()
                                 }
 
-                                // Duration
-                                val start = timeRanges[spanCounter-1]
-                                val end = timeRanges[spanCounter+span-1]
-                                val duration = ChronoUnit.MINUTES.between(start.start, end.start)
-
                                 // Colors and names
                                 val typeDesc = jsoupDocument.getElementsByClass("$typeIdClass text-center").first()?.parent()
                                 val codeName: String? = typeDesc?.children()?.first()?.text()
                                 val fullName: String? = typeDesc?.children()?.last()?.text()
                                 val bgColor: String? = bgColors.getOrDefault(typeIdClass, null);
                                 val fgColor: String? = foregroundColors.getOrDefault(typeIdClass, null);
+
+                                // Duration
+                                var start = timeRanges[spanCounter-1]
+                                var end: TimeRange
+                                if (spanCounter+span-1 != timeRanges.count()) {
+                                    end = timeRanges[spanCounter+span-1]
+                                } else {
+                                    start = timeRanges[spanCounter-2]
+                                    end = timeRanges[spanCounter-1]
+                                }
+                                val duration = ChronoUnit.MINUTES.between(start.start, end.start)
 
                                 val startDate = LocalDateTime.of(localDate, start.start)
                                 val endDate = LocalDateTime.of(localDate, end.start)

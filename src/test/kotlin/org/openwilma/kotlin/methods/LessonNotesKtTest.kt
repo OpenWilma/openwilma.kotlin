@@ -2,12 +2,10 @@ package org.openwilma.kotlin.methods
 
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.openwilma.kotlin.OpenWilma
 import org.openwilma.kotlin.classes.WilmaServer
-import org.openwilma.kotlin.classes.WilmaSession
 import org.openwilma.kotlin.enums.LessonNoteRange
 import org.openwilma.kotlin.utils.LocalDateGSONAdapter
 import org.openwilma.kotlin.utils.LocalDateTimeGSONAdapter
