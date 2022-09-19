@@ -22,7 +22,7 @@ class WilmaAnnouncementsParser {
 
         fun parseAnnouncements(htmlDocument: String): List<Announcement> {
             val jsoupDocument = Jsoup.parse(htmlDocument)
-            val announcementItems = jsoupDocument.getElementsByClass("panel-body").first()?.children()
+            val announcementItems = jsoupDocument.getElementsByClass("left").first()?.getElementsByClass("panel-body")?.first()?.children()
 
             val announcements: MutableList<Announcement> = mutableListOf()
 
