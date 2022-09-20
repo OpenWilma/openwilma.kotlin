@@ -25,6 +25,7 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 
@@ -114,11 +115,13 @@ class WilmaLessonNoteParser {
 
                         decimalRegex.find(spacingConfig.attr("style"))?.let {width ->
                             val decimal = width.value.toDouble()
-                            startMinutes +=
-                                ((decimal / OpenWilma.lessonNoteFullHourWidth) * 60).roundToInt()
+                            if (decimal != 1.13) {
+                                startMinutes +=
+                                    ((decimal / OpenWilma.lessonNoteFullHourWidth) * 60).roundToInt()
+                            }
                         }
 
-                        if (span < colSpan+1 && lastIndex < tableSpacingConfigs.count()-2) {
+                        if (span < colSpan+1 && lastIndex+span+1 < tableSpacingConfigs.count()) {
                             decimalRegex.find(tableSpacingConfigs[lastIndex+span+1].attr("style"))?.let {width ->
                                 val decimal = width.value.toDouble()
                                 if (endMinutes < startMinutes) {
@@ -133,8 +136,9 @@ class WilmaLessonNoteParser {
                             continue
                         }
 
-                        val localStartTime: LocalTime= LocalTime.MIN.plusMinutes(startMinutes.toLong())
-                        val localEndTime: LocalTime= LocalTime.MIN.plusMinutes(endMinutes.toLong())
+
+                        val localStartTime: LocalTime = LocalTime.MIN.plusMinutes(startMinutes.toLong())
+                        val localEndTime: LocalTime = LocalTime.MIN.plusMinutes(endMinutes.toLong())
                         timeRanges.add(TimeRange(localStartTime, localEndTime))
                     }
                     lastIndex += 1+colSpan
@@ -142,9 +146,16 @@ class WilmaLessonNoteParser {
 
                 // Parse lesson notes
                 if (tableRows != null) {
+                    var lastDate: LocalDate? = null;
                     for (note in tableRows) {
                         val tableData = note.getElementsByTag("td")
-                        val localDate = LocalDate.parse(tableData[1].text(), DateTimeFormatter.ofPattern("d.M.yyyy", Locale.getDefault()))
+                        lateinit var localDate: LocalDate
+                        if (tableData[1].text().isBlank() && lastDate != null) {
+                            localDate = lastDate
+                        } else {
+                            localDate = LocalDate.parse(tableData[1].text(), DateTimeFormatter.ofPattern("d.M.yyyy", Locale.getDefault()))
+                            lastDate = localDate
+                        }
                         // Parse notices
                         val noticeTexts: List<String>? = tableData.lastOrNull()?.getElementsByTag("small")?.map {
                             it.getElementsByClass("lem").remove()
@@ -160,6 +171,7 @@ class WilmaLessonNoteParser {
                         tableData.removeLast()
                         tableData.removeLast()
                         var spanCounter = 0
+                        var eventCounter = 0
                         for (event in tableData) {
                             val span = event.attr("colspan").toIntOrNull() ?: 1
                             if (event.hasClass("event")) {
@@ -194,21 +206,35 @@ class WilmaLessonNoteParser {
                                 val fgColor: String? = foregroundColors.getOrDefault(typeIdClass, null);
 
                                 // Duration
-                                var start = timeRanges[spanCounter-1]
+                                var start = timeRanges[abs(spanCounter-1)]
                                 var end: TimeRange
                                 if (spanCounter+span-1 != timeRanges.count()) {
                                     end = timeRanges[spanCounter+span-1]
+                                } else if (eventCounter == 0) {
+                                    start = timeRanges[2]
+                                    end = timeRanges[3]
                                 } else {
                                     start = timeRanges[spanCounter-2]
                                     end = timeRanges[spanCounter-1]
                                 }
-                                val duration = ChronoUnit.MINUTES.between(start.start, end.start)
+                                var duration = ChronoUnit.MINUTES.between(start.start, end.start)
+                                lateinit var startDate: LocalDateTime
+                                lateinit var endDate: LocalDateTime
 
-                                val startDate = LocalDateTime.of(localDate, start.start)
-                                val endDate = LocalDateTime.of(localDate, end.start)
+                                if (duration < 0) {
+                                    startDate = LocalDateTime.of(localDate, end.start)
+                                    endDate = LocalDateTime.of(localDate, start.start)
+                                    duration = ChronoUnit.MINUTES.between(end.start, start.start)
+                                } else {
+                                    startDate = LocalDateTime.of(localDate, start.start)
+                                    endDate = LocalDateTime.of(localDate, end.start)
+                                }
+
+
 
                                 // Course name not available in attendance/view
                                 lessonNotes.add(LessonNote(codeName, fullName, discName, courseCode, null, teacherCode, teacherFullName, comments, bgColor, fgColor, startDate, endDate, duration.toInt(), clarificationMaker ))
+                                eventCounter += 1
                             }
                             spanCounter += span
                         }
