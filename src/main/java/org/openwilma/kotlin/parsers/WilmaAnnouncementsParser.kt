@@ -2,14 +2,11 @@ package org.openwilma.kotlin.parsers
 
 import org.jsoup.Jsoup
 import org.openwilma.kotlin.classes.announcements.Announcement
-import org.openwilma.kotlin.classes.exams.Exam
-import org.openwilma.kotlin.classes.people.WilmaTeacher
 import org.openwilma.kotlin.enums.UserType
 import java.text.SimpleDateFormat
-import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -34,6 +31,10 @@ class WilmaAnnouncementsParser {
                         currentDate = if (element.text().split(".").last().isBlank()) {
                             // autofill current year
                             dateFormat.parse("${element.text().trim()}${Calendar.getInstance().get(Calendar.YEAR)}")
+                        } else if (element.text().lowercase() == "tänään") {
+                            Date()
+                        } else if (element.text().lowercase() == "eilen") {
+                            Date.from(LocalDate.now().minusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC))
                         } else {
                             dateFormat.parse(element.text().trim())
                         }

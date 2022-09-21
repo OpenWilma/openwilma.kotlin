@@ -21,7 +21,7 @@ import kotlin.coroutines.suspendCoroutine
 public suspend fun getAnnouncements(wilmaSession: WilmaSession): List<Announcement> {
     return suspendCoroutine {
         val httpClient = WilmaHttpClient(wilmaSession)
-        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "news?printable&format=json"), object : WilmaHttpClient.HttpClientInterface {
+        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "news?printable&format=json&LangID=1"), object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 if (JSONUtils.isJSONValid(response)) {
                     val error: JSONErrorResponse = WilmaJSONParser.gson.fromJson(response, object: TypeToken<JSONErrorResponse>() {}.type)
