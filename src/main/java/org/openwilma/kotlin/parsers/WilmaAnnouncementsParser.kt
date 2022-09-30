@@ -41,7 +41,8 @@ class WilmaAnnouncementsParser {
                     } else if (element.tagName() == "div" && element.hasClass("well") && currentDate != null) {
                         val title = element.getElementsByTag("h3").first()!!.text()
                         val description = element.getElementsByClass("sub-text").first()?.wholeText()
-                        val newsId = element.getElementsByTag("a").first()?.attr("href")?.split("/")?.last()?.trim()!!.toInt()
+                        // If news id is not present, user is unable to view its full content.
+                        val newsId = element.getElementsByTag("a").first()?.attr("href")?.split("/")?.last()?.trim()?.toInt() ?: -1
                         val linkContainer = element.getElementsByClass("horizontal-link-container small").first()
                         val creatorElement = linkContainer?.getElementsByAttribute("title")?.first()
                         val creatorCode: String? = creatorElement?.text()
