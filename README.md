@@ -9,10 +9,10 @@ OpenWilma Kotlin library
 
 ```gradle
 allprojects {
-	repositories {
-		...
-		maven { url 'https://jitpack.io' }
-	}
+    repositories {
+	...
+	maven { url 'https://maven.testausserveri.fi/openwilma' }
+    }
 }
   ```
   
@@ -21,7 +21,7 @@ allprojects {
  
  ```gradle
  dependencies {
-	        implementation 'com.github.OpenWilma:openwilma.kotlin:version'
+    implementation 'org.openwilma:kotlin:0.9.7-BETA'
  }
  ```
  
