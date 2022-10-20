@@ -6,6 +6,7 @@ plugins {
     id("java-library")
     id("maven-publish")
     kotlin("jvm") version "1.6.21"
+    id("org.hibernate.build.maven-repo-auth") version "3.0.3"
 }
 
 repositories {
@@ -19,6 +20,12 @@ publishing {
             groupId = "org.openwilma"
             artifactId = "kotlin"
             version = "0.9.7-BETA"
+        }
+    }
+    repositories {
+        maven {
+            url = uri("https://maven.testausserveri.fi/openwilma")
+            name = "Testausmaven"
         }
     }
 }

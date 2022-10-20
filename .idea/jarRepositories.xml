@@ -16,5 +16,10 @@
       <option name="name" value="MavenRepo" />
       <option name="url" value="https://repo.maven.apache.org/maven2/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="Testausmaven" />
+      <option name="name" value="Testausmaven" />
+      <option name="url" value="https://maven.testausserveri.fi/openwilma" />
+    </remote-repository>
   </component>
 </project>
