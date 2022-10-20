@@ -3,9 +3,10 @@ package org.openwilma.kotlin.methods
 import com.google.gson.reflect.TypeToken
 import okhttp3.FormBody
 import okhttp3.Response
+import okhttp3.internal.closeQuietly
 import org.openwilma.kotlin.OpenWilma
-import org.openwilma.kotlin.classes.WilmaSession
 import org.openwilma.kotlin.classes.WilmaServer
+import org.openwilma.kotlin.classes.WilmaSession
 import org.openwilma.kotlin.classes.errors.CredentialsError
 import org.openwilma.kotlin.classes.errors.Error
 import org.openwilma.kotlin.classes.errors.ErrorType
@@ -61,7 +62,6 @@ public suspend fun signIn(wilmaServer: WilmaServer, username: String, password: 
             override fun onRawResponse(response: Response) {
                 response.body?.let { resp ->
                     val content = resp.string()
-                    resp.close()
                     if (JSONUtils.isJSONValid(content)) {
                         val errorResponse = WilmaJSONParser.gson.fromJson<JSONErrorResponse>(content, object: TypeToken<JSONErrorResponse>() {}.type)
                         errorResponse.wilmaError?.let {wilmaError ->
@@ -70,6 +70,7 @@ public suspend fun signIn(wilmaServer: WilmaServer, username: String, password: 
                         }
                     }
                 }
+                response.closeQuietly()
                 if (response.headers.names().contains("Location")) {
                     val location = response.headers["Location"]!!
 

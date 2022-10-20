@@ -4,7 +4,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
-import org.openwilma.kotlin.OpenWilma
+import okhttp3.internal.closeQuietly
 import org.openwilma.kotlin.classes.WilmaSession
 import org.openwilma.kotlin.classes.errors.Error
 import org.openwilma.kotlin.classes.errors.ErrorType
@@ -55,14 +55,15 @@ class WilmaHttpClient {
             val body = response.body
             if (body != null) {
                 val content = body.string()
+                body.closeQuietly()
                 if (containsSession) {
                     SessionUtils.checkSessionExpiration(content)
                 }
-                body.close()
                 httpClientInterface.onResponse(content, response.code)
             } else {
                 httpClientInterface.onFailed(Error("No content in response", ErrorType.NoContent))
             }
+            response.closeQuietly()
         } catch (e: IOException) {
             httpClientInterface.onFailed(NetworkError(e))
         } catch (e: ExpiredSessionError) {
@@ -79,6 +80,7 @@ class WilmaHttpClient {
         try {
             val response = client.newCall(getRequest).execute()
             httpClientInterface.onRawResponse(response)
+            response.closeQuietly()
         } catch (e: IOException) {
             httpClientInterface.onFailed(NetworkError(e))
         }
@@ -97,14 +99,15 @@ class WilmaHttpClient {
             val body = response.body
             if (body != null) {
                 val content = body.string()
+                body.closeQuietly()
                 if (containsSession) {
                     SessionUtils.checkSessionExpiration(content)
                 }
-                body.close()
                 httpClientInterface.onResponse(content, response.code)
             } else {
                 httpClientInterface.onFailed(Error("No content in response", ErrorType.NoContent))
             }
+            response.closeQuietly()
         } catch (e: IOException) {
             httpClientInterface.onFailed(NetworkError(e))
         } catch (e: ExpiredSessionError) {

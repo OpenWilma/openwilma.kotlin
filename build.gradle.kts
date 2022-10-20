@@ -19,7 +19,7 @@ publishing {
             from(components["java"])
             groupId = "org.openwilma"
             artifactId = "kotlin"
-            version = "0.9.7-BETA"
+            version = "0.9.8-BETA"
         }
     }
     repositories {
@@ -33,7 +33,7 @@ publishing {
 dependencies {
     implementation("com.google.code.gson:gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
-    implementation("org.json:json:20220320")
+    implementation("org.json:json:20220924")
     implementation("org.jsoup:jsoup:1.15.3")
     implementation("com.helger:ph-css:6.5.0")
     implementation("commons-io:commons-io:2.11.0")
