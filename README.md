@@ -21,7 +21,7 @@ allprojects {
  
  ```gradle
  dependencies {
-    implementation 'org.openwilma:kotlin:0.9.7-BETA'
+    implementation 'org.openwilma:kotlin:0.9.8-BETA'
  }
  ```
  
