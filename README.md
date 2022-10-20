@@ -1,7 +1,7 @@
 # openwilma.kotlin
 OpenWilma Kotlin library
 
-[![](https://jitpack.io/v/OpenWilma/openwilma.kotlin.svg)](https://jitpack.io/#OpenWilma/openwilma.kotlin) [![](https://github.com/openwilma/openwilma.kotlin/actions/workflows/gradle.yml/badge.svg)](https://github.com/OpenWilma/openwilma.kotlin/actions/workflows/gradle.yml)
+[![](https://maven.testausserveri.fi/api/badge/latest/openwilma/org/openwilma/kotlin/?color=40c14a&name=Testausmaven&prefix=v)](https://maven.testausserveri.fi/#/openwilma/org/openwilma/kotlin) [![](https://github.com/openwilma/openwilma.kotlin/actions/workflows/gradle.yml/badge.svg)](https://github.com/OpenWilma/openwilma.kotlin/actions/workflows/gradle.yml)
 
 ## How to install
 
@@ -9,10 +9,10 @@ OpenWilma Kotlin library
 
 ```gradle
 allprojects {
-	repositories {
-		...
-		maven { url 'https://jitpack.io' }
-	}
+    repositories {
+	...
+	maven { url 'https://maven.testausserveri.fi/openwilma' }
+    }
 }
   ```
   
@@ -21,7 +21,7 @@ allprojects {
  
  ```gradle
  dependencies {
-	        implementation 'com.github.OpenWilma:openwilma.kotlin:version'
+    implementation 'org.openwilma:kotlin:0.9.7-BETA'
  }
  ```
  
