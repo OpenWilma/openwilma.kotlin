@@ -61,7 +61,7 @@ public suspend fun signIn(wilmaServer: WilmaServer, username: String, password: 
             override fun onRawResponse(response: Response) {
                 response.body?.let { resp ->
                     val content = resp.string()
-                    println(content)
+                    resp.close()
                     if (JSONUtils.isJSONValid(content)) {
                         val errorResponse = WilmaJSONParser.gson.fromJson<JSONErrorResponse>(content, object: TypeToken<JSONErrorResponse>() {}.type)
                         errorResponse.wilmaError?.let {wilmaError ->

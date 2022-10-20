@@ -20,7 +20,8 @@ public class OpenWilma {
     var wilmaSession: WilmaSession = WilmaSession()
 
     companion object {
-        const val version = 1
+        const val version = 7
+        const val versionName = "0.9.7-beta"
         const val minimumSupportedWilmaVersion = 19
         const val lessonNoteFullHourWidth = 5.63
         var checkSessionErrors = true

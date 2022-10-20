@@ -58,6 +58,7 @@ class WilmaHttpClient {
                 if (containsSession) {
                     SessionUtils.checkSessionExpiration(content)
                 }
+                body.close()
                 httpClientInterface.onResponse(content, response.code)
             } else {
                 httpClientInterface.onFailed(Error("No content in response", ErrorType.NoContent))
@@ -99,6 +100,7 @@ class WilmaHttpClient {
                 if (containsSession) {
                     SessionUtils.checkSessionExpiration(content)
                 }
+                body.close()
                 httpClientInterface.onResponse(content, response.code)
             } else {
                 httpClientInterface.onFailed(Error("No content in response", ErrorType.NoContent))

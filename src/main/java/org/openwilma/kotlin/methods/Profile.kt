@@ -2,6 +2,7 @@ package org.openwilma.kotlin.methods
 
 import com.google.gson.reflect.TypeToken
 import okhttp3.Response
+import okhttp3.internal.closeQuietly
 import org.apache.commons.io.IOUtils
 import org.openwilma.kotlin.classes.WilmaSession
 import org.openwilma.kotlin.classes.errors.Error
@@ -69,7 +70,9 @@ private suspend fun getRolePFP(wilmaSession: WilmaSession, role: WilmaRole, noEx
                 if (response.code == 200) {
                     val inputStream = response.body?.byteStream()
                     try {
-                        it.resume(Base64.getEncoder().encodeToString(IOUtils.toByteArray((inputStream))))
+                        val img = Base64.getEncoder().encodeToString(IOUtils.toByteArray((inputStream)));
+                        response.closeQuietly()
+                        it.resume(img)
                     } catch (e: Exception) {
                         if (noException) {
                             it.resume("")
