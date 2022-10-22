@@ -1,6 +1,5 @@
 package org.openwilma.kotlin.classes.courses
 
-import java.time.LocalDate
 import java.util.*
 
 data class WilmaCourse (
@@ -11,5 +10,6 @@ data class WilmaCourse (
     val startDate: Date?,
     val endDate: Date?,
     val committed: Boolean,
-    val teachers: List<WilmaCourseUser>?
+    val teachers: List<WilmaCourseUser>?,
+    var additionalInfo: WilmaCourseInfo?
 )

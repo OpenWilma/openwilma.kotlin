@@ -3,10 +3,7 @@ package org.openwilma.kotlin
 import org.openwilma.kotlin.classes.WilmaServer
 import org.openwilma.kotlin.classes.WilmaSession
 import org.openwilma.kotlin.classes.announcements.Announcement
-import org.openwilma.kotlin.classes.courses.WilmaCourse
-import org.openwilma.kotlin.classes.courses.WilmaCourseExam
-import org.openwilma.kotlin.classes.courses.WilmaCourseUser
-import org.openwilma.kotlin.classes.courses.WilmaHomework
+import org.openwilma.kotlin.classes.courses.*
 import org.openwilma.kotlin.classes.exams.Exam
 import org.openwilma.kotlin.classes.lessonnotes.LessonNote
 import org.openwilma.kotlin.classes.responses.SessionResponse
@@ -26,8 +23,8 @@ public class OpenWilma {
     var wilmaSession: WilmaSession = WilmaSession()
 
     companion object {
-        const val version = 9
-        const val versionName = "0.9.9-alpha"
+        const val version = 10
+        const val versionName = "0.9.9-beta"
         const val minimumSupportedWilmaVersion = 19
         const val lessonNoteFullHourWidth = 5.63
         var checkSessionErrors = true
@@ -60,8 +57,9 @@ public class OpenWilma {
 
         // Courses
 
-        suspend fun courses(wilmaSession: WilmaSession, timeRange: CourseTimeRange): WilmaAPIResponse<List<WilmaCourse>> = getCourses(wilmaSession, timeRange)
+        suspend fun courses(wilmaSession: WilmaSession, timeRange: CourseTimeRange, skipAdditionalInformation: Boolean = true): WilmaAPIResponse<List<WilmaCourse>> = getCourses(wilmaSession, timeRange, skipAdditionalInformation = skipAdditionalInformation)
         suspend fun course(wilmaSession: WilmaSession, id: Int): WilmaAPIResponse<WilmaCourse> = getCourse(wilmaSession, id)
+        suspend fun courseAdditionalInfo(wilmaSession: WilmaSession, courseId: Int): WilmaAPIResponse<WilmaCourseInfo> = getCourseAdditionalInformation(wilmaSession, courseId)
         suspend fun courseExams(wilmaSession: WilmaSession, id: Int): WilmaAPIResponse<List<WilmaCourseExam>> = getCourseExams(wilmaSession, id)
         suspend fun courseHomework(wilmaSession: WilmaSession, id: Int): WilmaAPIResponse<List<WilmaHomework>> = getCourseHomework(wilmaSession, id)
         suspend fun courseStudents(wilmaSession: WilmaSession, id: Int): WilmaAPIResponse<List<WilmaCourseUser>> = getCourseStudents(wilmaSession, id)
@@ -85,8 +83,9 @@ public class OpenWilma {
     suspend fun activeRole(roleRequired: Boolean = false): WilmaRole? = getActiveRole(wilmaSession, roleRequired)
     suspend fun schedule(date: LocalDate = LocalDate.now()): WilmaSchedule = getSchedule(wilmaSession, date)
     suspend fun scheduleRange(start: LocalDate, end: LocalDate): WilmaSchedule = getScheduleRange(wilmaSession, start, end)
-    suspend fun courses(timeRange: CourseTimeRange): WilmaAPIResponse<List<WilmaCourse>> = getCourses(wilmaSession, timeRange)
+    suspend fun courses(timeRange: CourseTimeRange, skipAdditionalInformation: Boolean = true): WilmaAPIResponse<List<WilmaCourse>> = getCourses(wilmaSession, timeRange, skipAdditionalInformation = skipAdditionalInformation)
     suspend fun course(id: Int): WilmaAPIResponse<WilmaCourse> = getCourse(wilmaSession, id)
+    suspend fun courseAdditionalInfo(courseId: Int): WilmaAPIResponse<WilmaCourseInfo> = getCourseAdditionalInformation(wilmaSession, courseId)
     suspend fun courseExams(id: Int): WilmaAPIResponse<List<WilmaCourseExam>> = getCourseExams(wilmaSession, id)
     suspend fun courseHomework(id: Int): WilmaAPIResponse<List<WilmaHomework>> = getCourseHomework(wilmaSession, id)
     suspend fun courseStudents(id: Int): WilmaAPIResponse<List<WilmaCourseUser>> = getCourseStudents(wilmaSession, id)

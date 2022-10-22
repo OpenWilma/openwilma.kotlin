@@ -29,6 +29,7 @@ class CoursesKtTest {
     @Test
     fun testCourses() = runBlocking {
         val courses = client.courses(timeRange = CourseTimeRange.CURRENT)
+        val coursesWithExtraDetails = client.courses(timeRange = CourseTimeRange.CURRENT, skipAdditionalInformation = false)
         val coursesPast = client.courses(timeRange = CourseTimeRange.PAST)
         val course = client.course(21128)
         val courseExams = client.courseExams(21128)
@@ -37,6 +38,6 @@ class CoursesKtTest {
         println(GsonBuilder()
             .registerTypeAdapter(LocalDate::class.java, LocalDateGSONAdapter())
             .registerTypeAdapter(LocalTime::class.java, LocalTimeGSONAdapter())
-            .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeGSONAdapter()).create().toJson(listOf(coursesPast, courses, course, courseExams, courseHomework, courseStudents)))
+            .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeGSONAdapter()).create().toJson(listOf(coursesPast, coursesWithExtraDetails, courses, course, courseExams, courseHomework, courseStudents)))
     }
 }
