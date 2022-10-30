@@ -6,6 +6,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.openwilma.kotlin.OpenWilma
 import org.openwilma.kotlin.classes.WilmaServer
+import org.openwilma.kotlin.enums.UserType
 
 
 internal class AuthenticationKtTest {
@@ -23,13 +24,15 @@ internal class AuthenticationKtTest {
     fun signInUsingBasicAccount(): Unit = runBlocking {
         val wilmaSession = OpenWilma.signInToWilma(wilmaServer, "oppilas", "oppilas")
         println(Gson().toJson(wilmaSession))
-        assert(wilmaSession.getAccountInfo() == null)
+        val roles = OpenWilma.roles(wilmaSession)
+        assert(roles.payload?.find { it.type == UserType.WILMA_ACCOUNT } == null)
     }
 
     @Test
     fun signInUsingRoleAccount(): Unit = runBlocking {
         val wilmaSession = OpenWilma.signInToWilma(wilmaServer, "ope", "ope")
-        assert(wilmaSession.getAccountInfo() != null)
+        val roles = OpenWilma.roles(wilmaSession)
+        assert(roles.payload?.find { it.type == UserType.WILMA_ACCOUNT } != null)
     }
 
     @Test

@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.openwilma.kotlin.OpenWilma
 import org.openwilma.kotlin.classes.WilmaServer
-import org.openwilma.kotlin.classes.WilmaSession
 import java.time.LocalDate
 
 class ScheduleKtTest {
