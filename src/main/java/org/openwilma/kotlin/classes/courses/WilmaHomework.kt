@@ -6,8 +6,6 @@ import java.util.Date
 
 data class WilmaHomework(
     val date: Date?,
-    @SerializedName("caption", alternate = ["note"])
+    @SerializedName("caption", alternate = ["lesson", "note"])
     val homework: String?,
-    val lesson: String?,
-    val note: String?
 )
