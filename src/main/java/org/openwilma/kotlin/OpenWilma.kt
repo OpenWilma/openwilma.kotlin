@@ -28,6 +28,7 @@ public class OpenWilma {
         const val minimumSupportedWilmaVersion = 19
         const val lessonNoteFullHourWidth = 5.63
         var checkSessionErrors = true
+        var disableRoleRequirement = false
         var customUserAgent: String? = null
 
         // Announcements

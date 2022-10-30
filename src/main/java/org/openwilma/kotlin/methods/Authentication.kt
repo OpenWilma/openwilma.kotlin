@@ -114,12 +114,12 @@ public suspend fun signIn(wilmaServer: WilmaServer, username: String, password: 
             }
         })
     }
-    val wilmaSession = WilmaSession(wilmaServer, cookie, null)
+    val wilmaSession = WilmaSession(wilmaServer, cookie, null, null)
     val userInfo = getUserAccount(wilmaSession)
     if (userInfo.payload == null) {
         val roles = getRoles(wilmaSession)
         if (roles.payload?.isNotEmpty() == true) {
-            return WilmaSession(wilmaServer, cookie, roles.payload!!.first())
+            return WilmaSession(wilmaServer, cookie, userInfo.payload, roles.payload!!.first())
         }
         throw Error("Could not find account role!", ErrorType.InvalidContent)
     } else {
@@ -127,6 +127,6 @@ public suspend fun signIn(wilmaServer: WilmaServer, username: String, password: 
         if (userInfo.payload?.mfaEnabled == true) {
             throw MFAError()
         }
-        return WilmaSession(wilmaServer, cookie)
+        return WilmaSession(wilmaServer, cookie, userInfo.payload)
     }
 }

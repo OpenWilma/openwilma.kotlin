@@ -109,6 +109,8 @@ public suspend fun getActiveRole(wilmaSession: WilmaSession, roleRequired: Boole
                 val role = wilmaSession.getRole(requireRole = roleRequired)
                 if (role != null) {
                     it.resume(jsonResponse.payload?.find { newRole -> newRole.primusId == role.primusId && newRole.type == role.type })
+                } else if (wilmaSession.getAccountInfo() != null) {
+                    it.resume(jsonResponse.payload?.find { newRole -> newRole.primusId == wilmaSession.getAccountInfo()?.primusId && newRole.type == UserType.WILMA_ACCOUNT })
                 } else {
                     it.resume(jsonResponse.payload?.find { newRole -> newRole.type == UserType.WILMA_ACCOUNT } ?: jsonResponse.payload?.first { payloadRole -> payloadRole.type != UserType.WILMA_ACCOUNT })
                 }
