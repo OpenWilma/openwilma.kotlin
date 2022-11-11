@@ -24,8 +24,8 @@ public class OpenWilma {
     var wilmaSession: WilmaSession = WilmaSession()
 
     companion object {
-        const val version = 12
-        const val versionName = "0.9.16-beta"
+        const val version = 13
+        const val versionName = "0.9.17-beta"
         const val minimumSupportedWilmaVersion = 19
         const val lessonNoteFullHourWidth = 5.63
         var cacheDirectory = System.getProperty("user.home") + File.separator+ ".openwilma_cache"
@@ -47,6 +47,7 @@ public class OpenWilma {
 
         // Lesson Notes
         suspend fun lessonNotes(wilmaSession: WilmaSession, dateRange: LessonNoteRange = LessonNoteRange.DEFAULT, start: LocalDate? = null, end: LocalDate? = null): List<LessonNote> = getLessonNotes(wilmaSession, dateRange, start, end)
+        suspend fun canSaveLessonNoteExcuse(wilmaSession: WilmaSession): Boolean = canSaveExcuse(wilmaSession)
 
         // Profile
         suspend fun account(wilmaSession: WilmaSession): WilmaAPIResponse<WilmaAccountInfo> = getUserAccount(wilmaSession)
@@ -80,6 +81,8 @@ public class OpenWilma {
     suspend fun upcomingExams(): List<Exam> = getUpcomingExams(wilmaSession)
     suspend fun pastExams(start: LocalDate? = null, end: LocalDate? = null): List<Exam> = getPastExams(wilmaSession, start, end)
     suspend fun lessonNotes(dateRange: LessonNoteRange = LessonNoteRange.DEFAULT, start: LocalDate? = null, end: LocalDate? = null): List<LessonNote> = getLessonNotes(wilmaSession, dateRange, start, end)
+    suspend fun canSaveLessonNoteExcuse(): Boolean = canSaveExcuse(wilmaSession)
+
     suspend fun account() = getUserAccount(wilmaSession)
     suspend fun roles(): WilmaAPIResponse<List<WilmaRole>> = getRoles(wilmaSession)
     suspend fun activeUserFormKey(roleRequired: Boolean = false): String? = getActiveUserFormKey(wilmaSession, roleRequired)

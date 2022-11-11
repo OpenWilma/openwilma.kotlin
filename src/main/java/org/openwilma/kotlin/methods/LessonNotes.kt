@@ -2,6 +2,7 @@ package org.openwilma.kotlin.methods
 
 import com.google.gson.reflect.TypeToken
 import okhttp3.Response
+import org.json.JSONObject
 import org.openwilma.kotlin.classes.WilmaSession
 import org.openwilma.kotlin.classes.errors.Error
 import org.openwilma.kotlin.classes.lessonnotes.LessonNote
@@ -59,6 +60,33 @@ public suspend fun getLessonNotes(wilmaSession: WilmaSession, dateRange: LessonN
                         it.resume(allNotes)
                     }
                 })
+            }
+
+            override fun onRawResponse(response: Response) {}
+
+            override fun onFailed(error: Error) {
+                it.resumeWithException(error)
+            }
+        })
+    }
+}
+
+public suspend fun canSaveExcuse(wilmaSession: WilmaSession): Boolean {
+    return suspendCoroutine {
+        val httpClient = WilmaHttpClient.getInstance()
+        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "attendance/report?format=json"), wilmaSession, object : WilmaHttpClient.HttpClientInterface {
+            override fun onResponse(response: String, status: Int) {
+                if (JSONUtils.isJSONValid(response)) {
+                    val error: JSONErrorResponse = WilmaJSONParser.gson.fromJson(response, object: TypeToken<JSONErrorResponse>() {}.type)
+                    if (error.wilmaError != null) {
+                        it.resumeWithException(error.wilmaError!!)
+                        return
+                    }
+                    val json = JSONObject(response);
+                    it.resume(json.has("Excuses"))
+                    return;
+                }
+                it.resume(false)
             }
 
             override fun onRawResponse(response: Response) {}
