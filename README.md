@@ -26,3 +26,11 @@ allprojects {
  ```
  
  3. Start using OpenWilma!
+ 
+ ### Android and ProGuard
+ 
+ If you're using ProGuard in your Android project, be sure to include this snippet in your `proguard-rules.pro`:
+```gradle
+-keep class org.openwilma.** { *; }
+-keep public class org.openwilma.** { *; }
+```
