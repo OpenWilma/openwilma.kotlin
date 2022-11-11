@@ -26,9 +26,9 @@ public suspend fun getSchedule(wilmaSession: WilmaSession, date: LocalDate = Loc
     // Role required for user type
     val currentRole: WilmaRole = wilmaSession.getRole() ?: getActiveRole(wilmaSession, false)!!
     return suspendCoroutine {
-        val httpClient = WilmaHttpClient(wilmaSession)
+        val httpClient = WilmaHttpClient.getInstance()
         // Exception for user type guardian: needs to be set as student
-        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "schedule/export/${if (currentRole.type == UserType.GUARDIAN) UserType.STUDENT.userTypeString else currentRole.type.userTypeString}s/${currentRole.primusId}/index_json?date=${wilmaFinnishLocalDateFormat.format(date)}"), object : WilmaHttpClient.HttpClientInterface {
+        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "schedule/export/${if (currentRole.type == UserType.GUARDIAN) UserType.STUDENT.userTypeString else currentRole.type.userTypeString}s/${currentRole.primusId}/index_json?date=${wilmaFinnishLocalDateFormat.format(date)}"), wilmaSession, object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 val schedule: ScheduleResponse = WilmaJSONParser.gson.fromJson(response, object: TypeToken<ScheduleResponse>() {}.type)
                 if (schedule.wilmaError != null) {

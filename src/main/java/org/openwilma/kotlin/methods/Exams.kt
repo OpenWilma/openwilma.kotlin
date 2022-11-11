@@ -21,8 +21,8 @@ import kotlin.coroutines.suspendCoroutine
 
 public suspend fun getUpcomingExams(wilmaSession: WilmaSession): List<Exam> {
     return suspendCoroutine {
-        val httpClient = WilmaHttpClient(wilmaSession)
-        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "exams/calendar?format=json"), object : WilmaHttpClient.HttpClientInterface {
+        val httpClient = WilmaHttpClient.getInstance()
+        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "exams/calendar?format=json"), wilmaSession, object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 if (JSONUtils.isJSONValid(response)) {
                     val error: JSONErrorResponse = WilmaJSONParser.gson.fromJson(response, object: TypeToken<JSONErrorResponse>() {}.type)
@@ -45,9 +45,9 @@ public suspend fun getUpcomingExams(wilmaSession: WilmaSession): List<Exam> {
 
 public suspend fun getPastExams(wilmaSession: WilmaSession, start: LocalDate? = null, end: LocalDate? = null): List<Exam> {
     return suspendCoroutine {
-        val httpClient = WilmaHttpClient(wilmaSession)
+        val httpClient = WilmaHttpClient.getInstance()
         val dateFormat = DateTimeFormatter.ofPattern("d.M.yyyy", Locale.getDefault())
-        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "exams/calendar/past?printable&format=json"+(if (start != null && end != null) "&range=-3&first=${dateFormat.format(start)}&last=${dateFormat.format(end)}" else "")), object : WilmaHttpClient.HttpClientInterface {
+        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "exams/calendar/past?printable&format=json"+(if (start != null && end != null) "&range=-3&first=${dateFormat.format(start)}&last=${dateFormat.format(end)}" else "")), wilmaSession, object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 if (JSONUtils.isJSONValid(response)) {
                     val schedule: JSONErrorResponse = WilmaJSONParser.gson.fromJson(response, object: TypeToken<JSONErrorResponse>() {}.type)

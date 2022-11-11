@@ -24,8 +24,8 @@ import kotlin.coroutines.suspendCoroutine
 
 public suspend fun getSessionId(wilmaServer: WilmaServer, skipVersionValidation: Boolean = false): SessionResponse {
     return suspendCoroutine {
-        val httpClient = WilmaHttpClient()
-        httpClient.getRequest(URLUtils.buildUrl(wilmaServer, "index_json"), object : WilmaHttpClient.HttpClientInterface {
+        val httpClient = WilmaHttpClient.getInstance()
+        httpClient.getRequest(URLUtils.buildUrl(wilmaServer, "index_json"), httpClientInterface = object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 val responseObject: SessionResponse = WilmaJSONParser.gson.fromJson(response, object: TypeToken<SessionResponse>() {}.type)
                 if (responseObject.apiVersion < OpenWilma.minimumSupportedWilmaVersion && !skipVersionValidation) {
@@ -47,7 +47,7 @@ public suspend fun getSessionId(wilmaServer: WilmaServer, skipVersionValidation:
 public suspend fun signIn(wilmaServer: WilmaServer, username: String, password: String, skipVersionValidation: Boolean = false): WilmaSession {
     val sessionId = getSessionId(wilmaServer, skipVersionValidation = skipVersionValidation)
     val cookie: String = suspendCoroutine {
-        val httpClient = WilmaHttpClient(false)
+        val httpClient = WilmaHttpClient.getInstance(false)
         val formBuilder: FormBody.Builder = FormBody.Builder()
         // Login parameters
         formBuilder.add("Login", username)
@@ -56,7 +56,7 @@ public suspend fun signIn(wilmaServer: WilmaServer, username: String, password: 
         formBuilder.add("CompleteJson", "")
         formBuilder.add("format", "json")
 
-        httpClient.postRawRequest(URLUtils.buildUrl(wilmaServer, "login"), formBuilder.build(), object : WilmaHttpClient.HttpClientInterface {
+        httpClient.postRawRequest(URLUtils.buildUrl(wilmaServer, "login"), formBuilder.build(), httpClientInterface =  object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {}
 
             override fun onRawResponse(response: Response) {

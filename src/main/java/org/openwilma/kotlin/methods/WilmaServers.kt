@@ -12,8 +12,8 @@ import kotlin.coroutines.suspendCoroutine
 
 public suspend fun getWilmaServers(): WilmaServersResponse {
     return suspendCoroutine {
-        val httpClient = WilmaHttpClient()
-        httpClient.getRequest(Config.wilmaServersURL, object : WilmaHttpClient.HttpClientInterface {
+        val httpClient = WilmaHttpClient.getInstance()
+        httpClient.getRequest(Config.wilmaServersURL, httpClientInterface = object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 it.resume(WilmaJSONParser.gson.fromJson(response, object: TypeToken<WilmaServersResponse>() {}.type))
             }

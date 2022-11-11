@@ -1,0 +1,214 @@
+<div class="panel tab-content">
+                            <h1 class="sr-only">Tuntimerkinnät</h1>
+                            <div id="page-content-area" class="panel-body">
+                                
+        
+
+        <!-- Sivukohtainen alue alkaa -->
+
+            
+            
+            <main id="main-content">
+                
+
+
+
+
+    <p>
+        
+            Seuraavat opiskelijan tuntimerkinnät ovat vielä selvittämättä:
+            
+        
+    </p>
+    
+    
+        <form action="/attendance/saveexcuse" method="post">
+        <h2 class="sr-only">Selvittämättömien tuntimerkintöjen valitseminen</h2>
+        <div class="table-responsive margin-bottom">
+<table class="datatable first attendance-single table bottom-margin-inline">
+  <colgroup><col width="4%"><col width="11%"><col style="width : 5.63%;" width="6%"><col style="width : 5.63%;" width="6%"><col style="width : 5.63%;" width="6%"><col style="width : 1.41%;" width="2%"><col style="width : 4.22%;" width="5%"><col style="width : 5.63%;" width="6%"><col style="width : 1.41%;" width="1%"><col style="width : 4.22%;" width="4%"><col style="width : 2.81%;" width="2%"><col style="width : 2.81%;" width="2%"><col style="width : 5.63%;" width="5%">
+<col width="10%"><col width="30%">
+  </colgroup><thead>
+  <tr>
+    <th colspan="2" align="left">Päivämäärä </th>
+    <th class="center">8</th>
+    <th class="center">9</th>
+    <th class="center">10</th>
+    <th colspan="2" class="center">11</th>
+    <th class="center">12</th>
+    <th colspan="2" class="center">13</th>
+    <th colspan="2" class="center">14</th>
+    <th class="center">15</th>
+    <th class="center">Yhteensä </th>
+    <th style="min-width:300px;">Huomioita<br></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+    <td>Ti </td>
+    <td align="right">8.11.2022 </td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td class="event at-bl at-tp57" colspan="2" title="MAA06; Poissa; Poissa tunnin jälkipuoliskon. /Ivar Haasianlahti"><h3 class="sr-only">tuntimerkintä Poissa Selvitettävä poissaolo (lu) Lisääjä Ivar Haasianlahti Päivämäärä 08.11.2022</h3><input type="checkbox" name="item91900579" value="true" title="MAA06; Poissa; Poissa tunnin jälkipuoliskon. /Ivar Haasianlahti"><sup>1</sup></td>
+      <td colspan="2">&nbsp;</td>
+      <td colspan="2">&nbsp;</td>
+      <td>&nbsp;</td>
+    <td class="total" align="center">1 </td>
+    <td><small>1: Poissa tunnin jälkipuoliskon. <span class="lem">/VAR</span><br></small></td>
+  </tr>
+  <tr>
+    <td>Ti </td>
+    <td align="right">6.9.2022 </td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td colspan="2">&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td class="event at-bl at-tp57" colspan="2" title="ENA04; Poissa; Tiivistelmä palauttamatta /Henriikka Vahosalmi"><h3 class="sr-only">tuntimerkintä Poissa Selvitettävä poissaolo (lu) Lisääjä Henriikka Vahosalmi Päivämäärä 06.09.2022</h3><input type="checkbox" name="item91771675" value="true" title="ENA04; Poissa; Tiivistelmä palauttamatta /Henriikka Vahosalmi"><sup>1</sup></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    <td class="total" align="center">1 </td>
+    <td><small>1: Tiivistelmä palauttamatta <span class="lem">/NRI</span><br></small></td>
+  </tr>
+  </tbody>
+  <tfoot class="summary">
+  <tr class="total semi-bold">
+    <td colspan="13">Yhteensä </td>
+    <td align="center">2</td>    <td>&nbsp;<br></td>
+  </tr>
+  </tfoot>
+</table>
+</div>
+
+        <script src="https://cdn.inschool.fi/2.33.49.1/scripts/cellexpansion.js" type="text/javascript" language="JavaScript"> </script>
+        
+        <div class="well">
+            <div class="container-fluid no-side-padding">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <h2 class="sr-only">Valittujen tuntimerkintöjen selvittäminen</h2>
+                            <label class="outside">Selvitä:</label>
+                            
+                                <div class="radio no-top-margin">
+                                    <label>
+                                        <input type="radio" name="scope" value="all" checked="">Kaikki 2 tuntimerkintää
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="scope" value="selected" id="cellex-activated">Vain valitsemasi tuntimerkinnät
+                                    </label>
+                                </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="wff-type">Syy</label>
+                            
+                                <div class="select-wrapper"><select name="type" id="wff-type">
+                                    <option data-explanationprohibited="true" value="0" selected="">---</option>
+                                    <option data-explanationprohibited="true" value="61">Luvaton poissaolo (lu)</option>
+                                    <option data-explanationprohibited="true" value="62">Selvitetty poissaolo (lu)</option>
+                                </select><span class="holder">---</span></div>
+                            
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div id="explanation-container" class="form-group" hidden="">
+                            <label for="wff-text">Lisätietoja</label>
+                            <input placeholder="Lisätietojen kirjaus on vapaaehtoista. Järjestelmään ei tule kirjata terveyteen liittyviä tietoja." type="text" name="text" id="wff-text" value="" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row margin-top text-right">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right">
+                        <input type="submit" class="btn btn-primary" name="savebtn" value="Tallenna selvitys">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+    
+
+
+
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        
+        
+            
+        
+    </div>
+</div>
+
+
+    <div class="panel-footer margin-top-inline">
+        <div class="panel-body-padding-remover">
+            <p>Värien ja koodien selitykset:</p>
+            <div class="legend">
+                <table>
+                
+                    <tbody><tr>
+                        <td class="at-tp57 text-center">po</td>
+                        <td>Selvitettävä poissaolo (lu)</td>
+                    </tr>
+                
+                    <tr>
+                        <td class="at-tp58 text-center">my</td>
+                        <td>Myöhästyminen (lu)</td>
+                    </tr>
+                
+                    <tr>
+                        <td class="at-tp63 text-center">okhy</td>
+                        <td>Aktiivinen (lu)</td>
+                    </tr>
+                
+                    <tr>
+                        <td class="at-tp59 text-center">ou</td>
+                        <td>Oppitunnin ulkopuolisessa toiminnassa (lu)</td>
+                    </tr>
+                
+                    <tr>
+                        <td class="at-tp60 text-center">lu</td>
+                        <td>Luvallinen poissaolo (lu)</td>
+                    </tr>
+                
+                    <tr>
+                        <td class="at-tp61 text-center">LUV</td>
+                        <td>Luvaton poissaolo (lu)</td>
+                    </tr>
+                
+                    <tr>
+                        <td class="at-tp62 text-center">SEL</td>
+                        <td>Selvitetty poissaolo (lu)</td>
+                    </tr>
+                
+                    <tr>
+                        <td class="at-tp81 text-center">etä</td>
+                        <td>Etätehtävät tekemättä</td>
+                    </tr>
+                
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+
+
+
+            </main>
+
+        <!-- Sivukohtainen alue loppuu -->
+
+        
+                            </div>
+                        </div>

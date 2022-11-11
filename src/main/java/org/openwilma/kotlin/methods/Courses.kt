@@ -16,8 +16,8 @@ import kotlin.coroutines.suspendCoroutine
 
 public suspend fun getCourses(wilmaSession: WilmaSession, timeRange: CourseTimeRange, skipAdditionalInformation: Boolean = true): WilmaAPIResponse<List<WilmaCourse>> {
     val courses: WilmaAPIResponse<List<WilmaCourse>> = suspendCoroutine {
-        val httpClient = WilmaHttpClient(wilmaSession)
-        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/gradebooks/$timeRange"), object : WilmaHttpClient.HttpClientInterface {
+        val httpClient = WilmaHttpClient.getInstance()
+        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/gradebooks/$timeRange"), wilmaSession, object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 it.resume(WilmaJSONParser.gson.fromJson(response, object: TypeToken<WilmaAPIResponse<List<WilmaCourse>>>() {}.type))
             }
@@ -44,8 +44,8 @@ public suspend fun getCourses(wilmaSession: WilmaSession, timeRange: CourseTimeR
 
 public suspend fun getCourseAdditionalInformation(wilmaSession: WilmaSession, id: Int): WilmaAPIResponse<WilmaCourseInfo> {
     return suspendCoroutine {
-        val httpClient = WilmaHttpClient(wilmaSession)
-        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/courses/$id"), object : WilmaHttpClient.HttpClientInterface {
+        val httpClient = WilmaHttpClient.getInstance()
+        httpClient.getCachedRequest(URLUtils.buildUrl(wilmaSession, "api/v1/courses/$id"), wilmaSession, object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 it.resume(WilmaJSONParser.gson.fromJson(response, object: TypeToken<WilmaAPIResponse<WilmaCourseInfo>>() {}.type))
             }
@@ -62,8 +62,8 @@ public suspend fun getCourseAdditionalInformation(wilmaSession: WilmaSession, id
 
 public suspend fun getCourse(wilmaSession: WilmaSession, id: Int): WilmaAPIResponse<WilmaCourse> {
     val course: WilmaAPIResponse<WilmaCourse> =  suspendCoroutine {
-        val httpClient = WilmaHttpClient(wilmaSession)
-        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/gradebooks/$id"), object : WilmaHttpClient.HttpClientInterface {
+        val httpClient = WilmaHttpClient.getInstance()
+        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/gradebooks/$id"), wilmaSession, object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 it.resume(WilmaJSONParser.gson.fromJson(response, object: TypeToken<WilmaAPIResponse<WilmaCourse>>() {}.type))
             }
@@ -84,8 +84,8 @@ public suspend fun getCourse(wilmaSession: WilmaSession, id: Int): WilmaAPIRespo
 
 public suspend fun getCourseExams(wilmaSession: WilmaSession, id: Int): WilmaAPIResponse<List<WilmaCourseExam>> {
     return suspendCoroutine {
-        val httpClient = WilmaHttpClient(wilmaSession)
-        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/gradebooks/$id/exams"), object : WilmaHttpClient.HttpClientInterface {
+        val httpClient = WilmaHttpClient.getInstance()
+        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/gradebooks/$id/exams"), wilmaSession, object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 it.resume(WilmaJSONParser.gson.fromJson(response, object: TypeToken<WilmaAPIResponse<List<WilmaCourseExam>>>() {}.type))
             }
@@ -101,8 +101,8 @@ public suspend fun getCourseExams(wilmaSession: WilmaSession, id: Int): WilmaAPI
 
 public suspend fun getCourseHomework(wilmaSession: WilmaSession, id: Int): WilmaAPIResponse<List<WilmaHomework>> {
     return suspendCoroutine {
-        val httpClient = WilmaHttpClient(wilmaSession)
-        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/gradebooks/$id/homework"), object : WilmaHttpClient.HttpClientInterface {
+        val httpClient = WilmaHttpClient.getInstance()
+        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/gradebooks/$id/homework"), wilmaSession, object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 it.resume(WilmaJSONParser.gson.fromJson(response, object: TypeToken<WilmaAPIResponse<List<WilmaHomework>>>() {}.type))
             }
@@ -121,8 +121,8 @@ public suspend fun getCourseHomework(wilmaSession: WilmaSession, id: Int): Wilma
  */
 public suspend fun getCourseStudents(wilmaSession: WilmaSession, id: Int): WilmaAPIResponse<List<WilmaCourseUser>> {
     return suspendCoroutine {
-        val httpClient = WilmaHttpClient(wilmaSession)
-        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/gradebooks/$id/students"), object : WilmaHttpClient.HttpClientInterface {
+        val httpClient = WilmaHttpClient.getInstance()
+        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/gradebooks/$id/students"), wilmaSession, object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 it.resume(WilmaJSONParser.gson.fromJson(response, object: TypeToken<WilmaAPIResponse<List<WilmaCourseUser>>>() {}.type))
             }

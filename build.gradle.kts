@@ -19,7 +19,7 @@ publishing {
             from(components["java"])
             groupId = "org.openwilma"
             artifactId = "kotlin"
-            version = "0.9.14-BETA"
+            version = "0.9.16-BETA"
         }
     }
     repositories {
@@ -37,6 +37,7 @@ dependencies {
     implementation("org.jsoup:jsoup:1.15.3")
     implementation("com.helger:ph-css:6.5.0")
     implementation("commons-io:commons-io:2.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.9.0")

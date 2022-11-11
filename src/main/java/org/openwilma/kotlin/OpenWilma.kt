@@ -15,6 +15,7 @@ import org.openwilma.kotlin.classes.user.WilmaRole
 import org.openwilma.kotlin.enums.CourseTimeRange
 import org.openwilma.kotlin.enums.LessonNoteRange
 import org.openwilma.kotlin.methods.*
+import java.io.File
 import java.time.LocalDate
 
 
@@ -23,10 +24,11 @@ public class OpenWilma {
     var wilmaSession: WilmaSession = WilmaSession()
 
     companion object {
-        const val version = 10
-        const val versionName = "0.9.9-beta"
+        const val version = 12
+        const val versionName = "0.9.16-beta"
         const val minimumSupportedWilmaVersion = 19
         const val lessonNoteFullHourWidth = 5.63
+        var cacheDirectory = System.getProperty("user.home") + File.separator+ ".openwilma_cache"
         var checkSessionErrors = true
         var disableRoleRequirement = false
         var customUserAgent: String? = null

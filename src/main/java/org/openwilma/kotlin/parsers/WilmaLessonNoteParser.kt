@@ -175,6 +175,11 @@ class WilmaLessonNoteParser {
                         for (event in tableData) {
                             val span = event.attr("colspan").toIntOrNull() ?: 1
                             if (event.hasClass("event")) {
+
+                                val clarificationId = event.getElementsByAttributeValueStarting("name", "item").firstOrNull()?.attr("name")?.replace("item", "")?.toIntOrNull()
+
+                                val needsClarification = clarificationId != null
+
                                 // Course info
                                 val courseCode: String? = if (event.attr("title").contains(";")) event.attr("title").split(";").first() else null
 
@@ -190,7 +195,7 @@ class WilmaLessonNoteParser {
                                     comments = noticesMap[event.getElementsByTag("sup").first()!!.text().trim()]
                                     event.getElementsByTag("sup").first()?.remove()
                                 }
-                                val teacherCode: String = event.text()
+                                val teacherCode: String? = if (!needsClarification) event.text() else null
 
                                 // Clarification record
                                 var clarificationMaker: String? = null
@@ -230,10 +235,11 @@ class WilmaLessonNoteParser {
                                     endDate = LocalDateTime.of(localDate, end.start)
                                 }
 
-
+                                val id = startDate.hashCode()+endDate.hashCode()+fullName.hashCode()+discName.hashCode()+courseCode.hashCode()+teacherFullName.hashCode()+bgColor.hashCode()+fgColor.hashCode()+duration
+                                // Set as variable if a new method is found for identifying clarification needs.
 
                                 // Course name not available in attendance/view
-                                lessonNotes.add(LessonNote(codeName, fullName, discName, courseCode, null, teacherCode, teacherFullName, comments, bgColor, fgColor, startDate, endDate, duration.toInt(), clarificationMaker ))
+                                lessonNotes.add(LessonNote(id, clarificationId, codeName, fullName, discName, courseCode, null, teacherCode, teacherFullName, comments, bgColor, fgColor, startDate, endDate, duration.toInt(), clarificationMaker, needsClarification))
                                 eventCounter += 1
                             }
                             spanCounter += span

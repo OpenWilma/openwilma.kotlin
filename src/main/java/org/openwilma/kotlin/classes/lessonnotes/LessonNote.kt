@@ -1,9 +1,10 @@
 package org.openwilma.kotlin.classes.lessonnotes
 
 import java.time.LocalDateTime
-import java.util.StringJoiner
 
 data class LessonNote(
+    val id: Long?,
+    var clarificationId: Int?,
     val noteCodename: String?,
     val noteName: String?,
     val discName: String?,
@@ -17,5 +18,6 @@ data class LessonNote(
     val noteStart: LocalDateTime?,
     val noteEnd: LocalDateTime?,
     val duration: Int?,
-    val clarifiedBy: String?
+    val clarifiedBy: String?,
+    var needsClarification: Boolean = false
 )

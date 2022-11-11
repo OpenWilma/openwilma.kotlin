@@ -1,41 +1,63 @@
 package org.openwilma.kotlin.clients
 
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.Response
+import okhttp3.*
 import okhttp3.internal.closeQuietly
+import okhttp3.logging.HttpLoggingInterceptor
+import org.openwilma.kotlin.OpenWilma
 import org.openwilma.kotlin.classes.WilmaSession
 import org.openwilma.kotlin.classes.errors.Error
 import org.openwilma.kotlin.classes.errors.ErrorType
 import org.openwilma.kotlin.classes.errors.ExpiredSessionError
 import org.openwilma.kotlin.classes.errors.NetworkError
-import org.openwilma.kotlin.utils.SessionUtils
-import org.openwilma.kotlin.utils.UserAgentInterceptor
-import org.openwilma.kotlin.utils.WilmaCookieJar
+import org.openwilma.kotlin.utils.*
+import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
-import kotlin.properties.Delegates
 
-class WilmaHttpClient {
+class WilmaHttpClient private constructor(followRedirects: Boolean = true) {
     private val client: OkHttpClient
-    private var containsSession by Delegates.notNull<Boolean>()
+    private val cachedClient: OkHttpClient
 
-    constructor() {
-        containsSession = false
-        client = OkHttpClient().newBuilder().callTimeout(60, TimeUnit.SECONDS).addInterceptor(UserAgentInterceptor()).build()
+    companion object {
+        private var basicSingletonInstance: WilmaHttpClient? = null
+        private var basicSingletonInstanceNoRedirect: WilmaHttpClient? = null
+        fun getInstance(): WilmaHttpClient {
+            if (basicSingletonInstance == null) {
+                basicSingletonInstance = WilmaHttpClient()
+            }
+            return basicSingletonInstance!!
+        }
+
+        fun getInstance(followRedirects: Boolean): WilmaHttpClient {
+            if (!followRedirects) {
+                if (basicSingletonInstanceNoRedirect == null) {
+                    basicSingletonInstanceNoRedirect = WilmaHttpClient(false)
+                }
+                return basicSingletonInstanceNoRedirect!!
+            }
+            if (basicSingletonInstance == null) {
+                basicSingletonInstance = WilmaHttpClient()
+            }
+            return basicSingletonInstance!!
+        }
     }
 
-    constructor(wilmaSession: WilmaSession) {
-        containsSession = true
-        client = OkHttpClient().newBuilder().cookieJar(WilmaCookieJar.getWilmaCookieJar(wilmaSession))
+    init {
+        val logging = HttpLoggingInterceptor()
+        logging.setLevel(HttpLoggingInterceptor.Level.NONE)
+        client = OkHttpClient().newBuilder().retryOnConnectionFailure(true).followRedirects(followRedirects).followSslRedirects(followRedirects)
+            .addInterceptor(logging)
             .callTimeout(60, TimeUnit.SECONDS).addInterceptor(UserAgentInterceptor()).build()
-    }
-
-    constructor(followRedirects: Boolean) {
-        containsSession = false
-        client = OkHttpClient().newBuilder().followRedirects(followRedirects).followSslRedirects(followRedirects)
-            .callTimeout(60, TimeUnit.SECONDS).addInterceptor(UserAgentInterceptor()).build()
+        cachedClient = OkHttpClient().newBuilder().retryOnConnectionFailure(true).followRedirects(followRedirects).followSslRedirects(followRedirects)
+            .addInterceptor(logging)
+            .callTimeout(60, TimeUnit.SECONDS).addInterceptor(UserAgentInterceptor())
+            .cache(
+                Cache(
+                    directory = File(OpenWilma.cacheDirectory),
+                    maxSize = 200L * 1024L * 1024L
+                )
+            ).addInterceptor(CacheInterceptor())
+            .addInterceptor(DiskCacheEnforcerInterceptor()).build()
     }
 
     interface HttpClientInterface {
@@ -43,9 +65,17 @@ class WilmaHttpClient {
         fun onRawResponse(response: Response)
         fun onFailed(error: Error)
     }
-
-    fun getRequest(url: String, httpClientInterface: HttpClientInterface) {
+    
+    private fun wilmaRequestBuilder(wilmaSession: WilmaSession?): Request.Builder {
         val requestBuilder = Request.Builder()
+        wilmaSession?.let {
+            requestBuilder.header("Cookie", WilmaSessionUtils.getWilmaCookies(it).joinToString(" ") { cookie -> cookie.toString() })
+        }
+        return requestBuilder;
+    }
+
+    fun getRequest(url: String, wilmaSession: WilmaSession? = null, httpClientInterface: HttpClientInterface) {
+        val requestBuilder = wilmaRequestBuilder(wilmaSession)
         requestBuilder.url(url)
 
         // Making the request
@@ -56,7 +86,7 @@ class WilmaHttpClient {
             if (body != null) {
                 val content = body.string()
                 body.closeQuietly()
-                if (containsSession) {
+                if (wilmaSession != null) {
                     SessionUtils.checkSessionExpiration(content)
                 }
                 httpClientInterface.onResponse(content, response.code)
@@ -71,8 +101,35 @@ class WilmaHttpClient {
         }
     }
 
-    fun getRawRequest(url: String, httpClientInterface: HttpClientInterface) {
-        val requestBuilder = Request.Builder()
+    fun getCachedRequest(url: String, wilmaSession: WilmaSession? = null, httpClientInterface: HttpClientInterface) {
+        val requestBuilder = wilmaRequestBuilder(wilmaSession)
+        requestBuilder.url(url)
+
+        // Making the request
+        val getRequest: Request = requestBuilder.build()
+        try {
+            val response = cachedClient.newCall(getRequest).execute()
+            val body = response.body
+            if (body != null) {
+                val content = body.string()
+                if (wilmaSession != null) {
+                    SessionUtils.checkSessionExpiration(content)
+                }
+                httpClientInterface.onResponse(content, response.code)
+                body.closeQuietly()
+            } else {
+                httpClientInterface.onFailed(Error("No content in response", ErrorType.NoContent))
+            }
+            response.closeQuietly()
+        } catch (e: IOException) {
+            httpClientInterface.onFailed(NetworkError(e))
+        } catch (e: ExpiredSessionError) {
+            httpClientInterface.onFailed(e)
+        }
+    }
+
+    fun getRawRequest(url: String, wilmaSession: WilmaSession? = null, httpClientInterface: HttpClientInterface) {
+        val requestBuilder = wilmaRequestBuilder(wilmaSession)
         requestBuilder.url(url)
 
         // Making the request
@@ -86,8 +143,8 @@ class WilmaHttpClient {
         }
     }
 
-    fun postRequest(url: String, requestBody: RequestBody, httpClientInterface: HttpClientInterface) {
-        val requestBuilder = Request.Builder()
+    fun postRequest(url: String, requestBody: RequestBody, wilmaSession: WilmaSession? = null, httpClientInterface: HttpClientInterface) {
+        val requestBuilder = wilmaRequestBuilder(wilmaSession)
         requestBuilder
             .post(requestBody)
             .url(url)
@@ -100,7 +157,7 @@ class WilmaHttpClient {
             if (body != null) {
                 val content = body.string()
                 body.closeQuietly()
-                if (containsSession) {
+                if (wilmaSession != null) {
                     SessionUtils.checkSessionExpiration(content)
                 }
                 httpClientInterface.onResponse(content, response.code)
@@ -115,8 +172,8 @@ class WilmaHttpClient {
         }
     }
 
-    fun postRawRequest(url: String, requestBody: RequestBody, httpClientInterface: HttpClientInterface) {
-        val requestBuilder = Request.Builder()
+    fun postRawRequest(url: String, requestBody: RequestBody, wilmaSession: WilmaSession? = null, httpClientInterface: HttpClientInterface) {
+        val requestBuilder = wilmaRequestBuilder(wilmaSession)
         requestBuilder
             .post(requestBody)
             .url(url)

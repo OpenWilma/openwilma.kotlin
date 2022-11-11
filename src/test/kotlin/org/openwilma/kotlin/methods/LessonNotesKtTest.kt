@@ -30,6 +30,8 @@ class LessonNotesKtTest {
     fun testLessonNotes() = runBlocking {
         val lessonNotes = client.lessonNotes(dateRange = LessonNoteRange.CUSTOM, start = LocalDate.of(2016, 12, 9), end = LocalDate.of(2023, 6, 3))
         println(GsonBuilder()
+            .setPrettyPrinting()
+            .serializeNulls()
             .registerTypeAdapter(LocalDate::class.java, LocalDateGSONAdapter())
             .registerTypeAdapter(LocalTime::class.java, LocalTimeGSONAdapter())
             .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeGSONAdapter()).create().toJson(lessonNotes))

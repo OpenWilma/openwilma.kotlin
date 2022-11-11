@@ -1,0 +1,273 @@
+<main id="main-content">
+                
+
+
+   
+    <div class="container-fluid margin-bottom no-side-padding">
+        <div class="row">
+            
+    <div class="col-lg-12
+                col-md-12
+                col-sm-12
+                col-xs-12">
+        <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        Jokin muu
+                    
+                
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                
+                    
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="/attendance/view?range=0">
+                                Neljä viikkoa
+                            </a>
+                        </li>
+                    
+                
+                    
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="/attendance/view?range=-1">
+                                Syksy
+                            </a>
+                        </li>
+                    
+                
+                    
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="/attendance/view?range=-2">
+                                Kevät
+                            </a>
+                        </li>
+                    
+                
+                    
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="/attendance/view?range=-4">
+                                Lukuvuosi
+                            </a>
+                        </li>
+                    
+                
+                    
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="/attendance/view?range=1">
+                                1. jakso
+                            </a>
+                        </li>
+                    
+                
+                    
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="/attendance/view?range=2">
+                                2. jakso
+                            </a>
+                        </li>
+                    
+                
+                    
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="/attendance/view?range=3">
+                                3. jakso
+                            </a>
+                        </li>
+                    
+                
+                    
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="/attendance/view?range=4">
+                                4. jakso
+                            </a>
+                        </li>
+                    
+                
+                    
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="/attendance/view?range=5">
+                                5. jakso
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+            </ul>
+        </div>
+    </div>
+
+
+
+    <form method="get" action="/attendance/view">
+        <input type="hidden" name="range" value="-3">
+        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 margin-bottom-inline">
+            <div class="form-group">
+                <label for="date-first">Alkaen</label>
+                <div class="datepick-wrapper col-fixer">
+                    <input type="text" name="first" id="date-first" value="31.10.2022" maxlength="10" class="date form-control is-datepick"><input type="button" aria-hidden="true" tabindex="-1" class="datepick-trigger">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 margin-bottom-inline">
+            <div class="form-group">
+                <label for="date-last">Päättyen</label>
+                <div class="datepick-wrapper col-fixer">
+                    <input type="text" id="date-last" name="last" value="9.11.2022" maxlength="10" class="date form-control is-datepick"><input type="button" aria-hidden="true" tabindex="-1" class="datepick-trigger">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-lg-pull-6 col-md-12 col-md-pull-6 col-sm-12 col-sm-pull-4 col-xs-12">
+            <input type="submit" class="btn btn-primary pull-right" value="Näytä">
+        </div>
+    </form>
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="table-responsive margin-bottom">
+<table class="datatable first attendance-single table bottom-margin-inline">
+  <colgroup><col width="4%"><col width="11%"><col style="width : 5.63%;" width="6%"><col style="width : 5.63%;" width="6%"><col style="width : 5.63%;" width="6%"><col style="width : 1.41%;" width="2%"><col style="width : 4.22%;" width="5%"><col style="width : 5.63%;" width="5%"><col style="width : 5.63%;" width="5%"><col style="width : 4.22%;" width="4%"><col style="width : 1.41%;" width="1%"><col style="width : 5.63%;" width="5%">
+<col width="10%"><col width="30%">
+  </colgroup><thead>
+  <tr>
+    <th colspan="2" align="left">Päivämäärä </th>
+    <th class="center">8</th>
+    <th class="center">9</th>
+    <th class="center">10</th>
+    <th colspan="2" class="center">11</th>
+    <th class="center">12</th>
+    <th class="center">13</th>
+    <th colspan="2" class="center">14</th>
+    <th class="center">15</th>
+    <th class="center">Yhteensä </th>
+    <th style="min-width:300px;">Huomioita<br></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+    <td>Ti </td>
+    <td align="right">8.11.2022 </td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td class="event at-bl at-tp57" colspan="2" title="MAA06; Poissa; Poissa tunnin jälkipuoliskon. /Ivar Haasianlahti">VAR<sup>1</sup></td>
+      <td>&nbsp;</td>
+      <td colspan="2">&nbsp;</td>
+      <td>&nbsp;</td>
+    <td class="total" align="center">1 </td>
+    <td><small>1: Poissa tunnin jälkipuoliskon. <span class="lem">/VAR</span><br></small></td>
+  </tr>
+  <tr>
+    <td>Pe </td>
+    <td align="right">4.11.2022 </td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td class="event at-bl at-tp62" colspan="2" title="S25; Selvitetty /Tiina Lappalainen - 5.11. /Amogus">TLA</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td class="event at-bl at-tp62" colspan="2" title="FY10; Selvitetty /Olli-Matti Leistola - 5.11. /Amogus">OML</td>
+    <td class="total" align="center">2 </td>
+    <td>&nbsp;<br></td>
+  </tr>
+  </tbody>
+  <tfoot class="summary">
+  <tr class="total semi-bold">
+    <td colspan="12">Yhteensä </td>
+    <td align="center">3</td>    <td>&nbsp;<br></td>
+  </tr>
+  </tfoot>
+</table>
+</div>
+        
+            
+        
+    </div>
+</div>
+
+
+    <div class="panel-footer margin-top-inline">
+        <div class="panel-body-padding-remover">
+            <p>Värien ja koodien selitykset:</p>
+            <div class="legend">
+                <table>
+                
+                    <tbody><tr>
+                        <td class="at-tp57 text-center">po</td>
+                        <td>Selvitettävä poissaolo (lu)</td>
+                    </tr>
+                
+                    <tr>
+                        <td class="at-tp58 text-center">my</td>
+                        <td>Myöhästyminen (lu)</td>
+                    </tr>
+                
+                    <tr>
+                        <td class="at-tp63 text-center">okhy</td>
+                        <td>Aktiivinen (lu)</td>
+                    </tr>
+                
+                    <tr>
+                        <td class="at-tp59 text-center">ou</td>
+                        <td>Oppitunnin ulkopuolisessa toiminnassa (lu)</td>
+                    </tr>
+                
+                    <tr>
+                        <td class="at-tp60 text-center">lu</td>
+                        <td>Luvallinen poissaolo (lu)</td>
+                    </tr>
+                
+                    <tr>
+                        <td class="at-tp61 text-center">LUV</td>
+                        <td>Luvaton poissaolo (lu)</td>
+                    </tr>
+                
+                    <tr>
+                        <td class="at-tp62 text-center">SEL</td>
+                        <td>Selvitetty poissaolo (lu)</td>
+                    </tr>
+                
+                    <tr>
+                        <td class="at-tp81 text-center">etä</td>
+                        <td>Etätehtävät tekemättä</td>
+                    </tr>
+                
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+
+
+
+            </main>

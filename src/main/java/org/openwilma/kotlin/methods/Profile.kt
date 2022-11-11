@@ -21,8 +21,8 @@ import kotlin.coroutines.suspendCoroutine
 
 public suspend fun getUserAccount(wilmaSession: WilmaSession): WilmaAPIResponse<WilmaAccountInfo> {
     return suspendCoroutine {
-        val httpClient = WilmaHttpClient(wilmaSession)
-        httpClient.getRequest(URLUtils.buildUrl(wilmaSession.wilmaServer, "api/v1/accounts/me"), object : WilmaHttpClient.HttpClientInterface {
+        val httpClient = WilmaHttpClient.getInstance()
+        httpClient.getRequest(URLUtils.buildUrl(wilmaSession.wilmaServer, "api/v1/accounts/me"), wilmaSession, object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 it.resume(WilmaJSONParser.gson.fromJson(response, object: TypeToken<WilmaAPIResponse<WilmaAccountInfo>>() {}.type))
             }
@@ -39,8 +39,8 @@ public suspend fun getUserAccount(wilmaSession: WilmaSession): WilmaAPIResponse<
 
 public suspend fun getRoles(wilmaSession: WilmaSession): WilmaAPIResponse<List<WilmaRole>> {
     val roles: WilmaAPIResponse<List<WilmaRole>> = suspendCoroutine {
-        val httpClient = WilmaHttpClient(wilmaSession)
-        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/accounts/me/roles", requireRole = false), object : WilmaHttpClient.HttpClientInterface {
+        val httpClient = WilmaHttpClient.getInstance()
+        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/accounts/me/roles", requireRole = false), wilmaSession, object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 it.resume(WilmaJSONParser.gson.fromJson(response, object: TypeToken<WilmaAPIResponse<List<WilmaRole>>>() {}.type))
             }
@@ -62,8 +62,8 @@ public suspend fun getActiveUserFormKey(wilmaSession: WilmaSession, roleRequired
 
 private suspend fun getRolePFP(wilmaSession: WilmaSession, role: WilmaRole, noException: Boolean =false): String {
     return suspendCoroutine {
-        val httpClient = WilmaHttpClient(wilmaSession)
-        httpClient.getRawRequest(URLUtils.buildUrlWithRole(wilmaSession, role, "profiles/photo"),  object : WilmaHttpClient.HttpClientInterface {
+        val httpClient = WilmaHttpClient.getInstance()
+        httpClient.getRawRequest(URLUtils.buildUrlWithRole(wilmaSession, role, "profiles/photo"), wilmaSession, object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {}
 
             override fun onRawResponse(response: Response) {
@@ -98,8 +98,8 @@ private suspend fun getRolePFP(wilmaSession: WilmaSession, role: WilmaRole, noEx
 
 public suspend fun getActiveRole(wilmaSession: WilmaSession, roleRequired: Boolean = false): WilmaRole? {
     val role: WilmaRole? =  suspendCoroutine {
-        val httpClient = WilmaHttpClient(wilmaSession)
-        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/accounts/me/roles", requireRole = roleRequired), object : WilmaHttpClient.HttpClientInterface {
+        val httpClient = WilmaHttpClient.getInstance()
+        httpClient.getRequest(URLUtils.buildUrl(wilmaSession, "api/v1/accounts/me/roles", requireRole = roleRequired), wilmaSession, object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {
                 val jsonResponse: WilmaAPIResponse<List<WilmaRole>> = WilmaJSONParser.gson.fromJson(response, object: TypeToken<WilmaAPIResponse<List<WilmaRole>>>() {}.type)
                 if (jsonResponse.error != null) {

@@ -29,7 +29,11 @@ class CoursesKtTest {
     @Test
     fun testCourses() = runBlocking {
         val courses = client.courses(timeRange = CourseTimeRange.CURRENT)
+        println("Get extra!")
         val coursesWithExtraDetails = client.courses(timeRange = CourseTimeRange.CURRENT, skipAdditionalInformation = false)
+        println("Got extra!")
+        client.courses(timeRange = CourseTimeRange.CURRENT, skipAdditionalInformation = false)
+        println("Got it again for cache validation!")
         val coursesPast = client.courses(timeRange = CourseTimeRange.PAST)
         val course = client.course(21128)
         val courseExams = client.courseExams(21128)
