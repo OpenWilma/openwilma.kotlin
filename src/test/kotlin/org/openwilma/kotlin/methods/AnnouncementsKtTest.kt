@@ -39,4 +39,14 @@ class AnnouncementsKtTest {
             .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeGSONAdapter()).create().toJson(exams))
     }
 
+
+    @Test
+    fun testAnnouncement() = runBlocking {
+        val announcement = openWilma.announcement(57)
+        println(GsonBuilder()
+            .registerTypeAdapter(LocalDate::class.java, LocalDateGSONAdapter())
+            .registerTypeAdapter(LocalTime::class.java, LocalTimeGSONAdapter())
+            .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeGSONAdapter()).create().toJson(announcement))
+    }
+
 }
