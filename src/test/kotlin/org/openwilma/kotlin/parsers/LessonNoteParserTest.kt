@@ -29,6 +29,11 @@ class LessonNoteParserTest {
         assert(notes.first().duration == 45)
         assert(notes.first().clarifiedBy == null)
         assert(notes.count() == 14)
+        println(GsonBuilder()
+            .serializeNulls()
+            .registerTypeAdapter(LocalDate::class.java, LocalDateGSONAdapter())
+            .registerTypeAdapter(LocalTime::class.java, LocalTimeGSONAdapter())
+            .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeGSONAdapter()).create().toJson(notes))
     }
 
     @Test

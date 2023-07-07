@@ -51,10 +51,10 @@ class WilmaExamsParser {
 
                 if (titleSplit?.count() == 3) {
                     subject = titleSplit[0]
-                    courseCode = titleSplit[1]
+                    courseCode = titleSplit[1].trim()
                     courseName = titleSplit[2]
                 } else if (titleSplit?.count() == 2) {
-                    courseCode = titleSplit[0]
+                    courseCode = titleSplit[0].trim()
                     courseName = titleSplit[1]
                 }
 

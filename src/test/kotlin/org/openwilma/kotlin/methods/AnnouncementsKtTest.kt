@@ -26,7 +26,8 @@ class AnnouncementsKtTest {
 
     @BeforeEach
     internal fun setUp(): Unit = runBlocking {
-        openWilma.signInToWilma(wilmaServer, "oppilas", "oppilas")
+        openWilma.signInToWilma(wilmaServer, "ope", "ope")
+        openWilma.roles().payload?.find { it.type != UserType.WILMA_ACCOUNT }?.let { openWilma.wilmaSession.setRole(it) }
     }
 
 
@@ -42,7 +43,7 @@ class AnnouncementsKtTest {
 
     @Test
     fun testAnnouncement() = runBlocking {
-        val announcement = openWilma.announcement(57)
+        val announcement = openWilma.announcement(21)
         println(GsonBuilder()
             .registerTypeAdapter(LocalDate::class.java, LocalDateGSONAdapter())
             .registerTypeAdapter(LocalTime::class.java, LocalTimeGSONAdapter())
