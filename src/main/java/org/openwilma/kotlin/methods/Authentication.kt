@@ -2,6 +2,7 @@ package org.openwilma.kotlin.methods
 
 import com.google.gson.reflect.TypeToken
 import okhttp3.FormBody
+import okhttp3.Headers
 import okhttp3.Response
 import okhttp3.internal.closeQuietly
 import org.openwilma.kotlin.OpenWilma
@@ -56,7 +57,7 @@ public suspend fun signIn(wilmaServer: WilmaServer, username: String, password: 
         formBuilder.add("CompleteJson", "")
         formBuilder.add("format", "json")
 
-        httpClient.postRawRequest(URLUtils.buildUrl(wilmaServer, "login"), formBuilder.build(), httpClientInterface =  object : WilmaHttpClient.HttpClientInterface {
+        httpClient.postRawRequest(URLUtils.buildUrl(wilmaServer, "login"), formBuilder.build(), headers = Headers.headersOf("Cookie", "Wilma2LoginID="+sessionId.sessionId), httpClientInterface =  object : WilmaHttpClient.HttpClientInterface {
             override fun onResponse(response: String, status: Int) {}
 
             override fun onRawResponse(response: Response) {

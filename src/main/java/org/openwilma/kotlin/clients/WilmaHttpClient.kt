@@ -172,11 +172,14 @@ class WilmaHttpClient private constructor(followRedirects: Boolean = true) {
         }
     }
 
-    fun postRawRequest(url: String, requestBody: RequestBody, wilmaSession: WilmaSession? = null, httpClientInterface: HttpClientInterface) {
+    fun postRawRequest(url: String, requestBody: RequestBody, wilmaSession: WilmaSession? = null, headers: Headers? = null, httpClientInterface: HttpClientInterface) {
         val requestBuilder = wilmaRequestBuilder(wilmaSession)
         requestBuilder
             .post(requestBody)
             .url(url)
+
+        if (headers != null)
+            requestBuilder.headers(headers)
 
         // Making the request
         val getRequest: Request = requestBuilder.build()
