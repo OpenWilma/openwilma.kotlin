@@ -68,7 +68,7 @@ class WilmaExamsParser {
                     }
                 }
 
-                exams.add(Exam(timestamp, creators, courseCode, courseName, subject, details?.wholeText(), grade, verbalGrade))
+                exams.add(Exam(timestamp, null, creators, courseCode, courseName, subject, details?.wholeText(), grade, verbalGrade))
             }
             return exams
         }
@@ -85,6 +85,18 @@ class WilmaExamsParser {
             if (examRows != null) {
                 for (examRow in examRows) {
                     val dataPoints = examRow.getElementsByTag("td")
+
+                    var seenTimestamp: LocalDateTime? = null
+
+                    if (dataPoints.count() > 6) {
+                        // This is maybe guardian which has seen field
+                        val seenDateTime = dataPoints.firstOrNull()
+                        if (dateRegex.find(seenDateTime?.text()?.lowercase() ?: "") != null) {
+                            seenTimestamp = LocalDateTime.of(LocalDate.from(dateFormat.parse(dateRegex.find(seenDateTime!!.text().lowercase())?.value)), LocalTime.of(0, 0,0))
+                        }
+                        // Remove item to not mess with the normal order
+                        dataPoints.removeAt(0)
+                    }
 
                     val dateAndTime = dataPoints.firstOrNull()
                     val titleSplit = dataPoints[2].text().split(" : ")
@@ -115,7 +127,7 @@ class WilmaExamsParser {
                         courseName = titleSplit[1].ifBlank { null }
                     }
 
-                    exams.add(Exam(timestamp, creators, courseCode, courseName, subject, details?.wholeText()?.ifBlank { null }, grade, verbalGrade))
+                    exams.add(Exam(timestamp, seenTimestamp, creators, courseCode, courseName, subject, details?.wholeText()?.ifBlank { null }, grade, verbalGrade))
                 }
             }
             return exams

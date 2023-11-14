@@ -5,6 +5,7 @@ import java.time.LocalDateTime
 
 data class Exam (
     val timestamp: LocalDateTime?,
+    val seenTimestamp: LocalDateTime?,
     val teachers: List<WilmaTeacher?>,
     val courseCode: String?,
     val courseName: String?,

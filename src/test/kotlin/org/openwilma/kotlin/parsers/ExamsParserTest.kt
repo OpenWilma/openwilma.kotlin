@@ -48,4 +48,16 @@ class ExamsParserTest {
             .registerTypeAdapter(LocalTime::class.java, LocalTimeGSONAdapter())
             .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeGSONAdapter()).create().toJson(exams))
     }
+
+    @Test
+    fun parsePastGuardianExams() {
+        val htmlDoc = Files.readString(Paths.get(javaClass.classLoader.getResource("exams_past_guardian.data")!!.toURI()))
+        val exams = WilmaExamsParser.parsePastExams(htmlDoc)
+        println(
+            GsonBuilder()
+                .setPrettyPrinting()
+                .registerTypeAdapter(LocalDate::class.java, LocalDateGSONAdapter())
+                .registerTypeAdapter(LocalTime::class.java, LocalTimeGSONAdapter())
+                .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeGSONAdapter()).create().toJson(exams))
+    }
 }

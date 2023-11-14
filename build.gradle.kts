@@ -19,7 +19,7 @@ publishing {
             from(components["java"])
             groupId = "org.openwilma"
             artifactId = "kotlin"
-            version = "0.9.19-BETA"
+            version = "0.9.20-BETA"
         }
     }
     repositories {
