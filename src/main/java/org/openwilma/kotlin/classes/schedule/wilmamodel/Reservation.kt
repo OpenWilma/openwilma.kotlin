@@ -35,7 +35,7 @@ data class Reservation  (
     @SerializedName("AllowAddMoveRemove")
     var isAllowAddMoveRemove: Boolean,
     @SerializedName("Groups")
-    var Groups: List<Group>,
+    var groups: List<Group>,
     @SerializedName("Dates")
     var dates: List<Date>? = null
 )
