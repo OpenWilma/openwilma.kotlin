@@ -24,8 +24,8 @@ public class OpenWilma {
     var wilmaSession: WilmaSession = WilmaSession()
 
     companion object {
-        const val version = 15
-        const val versionName = "0.9.20-beta"
+        const val version = 16
+        const val versionName = "0.9.21-beta"
         const val minimumSupportedWilmaVersion = 19
         const val lessonNoteFullHourWidth = 5.63
         var cacheDirectory = System.getProperty("user.home") + File.separator+ ".openwilma_cache"
